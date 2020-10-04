@@ -1,6 +1,6 @@
 # banner
 banner:
-  title : "Hi! I’m <br> Christoher <br> UX designer"
+  title : "Hi! I’m <br> Olivia <br> Student at LBS"
 
 # about
 about:
@@ -16,20 +16,20 @@ skill:
   enable : true
   title : "Skills"
   item:
-    - title : "Web Design"
+    - title : "Analytical Thinking"
       progress : "90%"
       color : "#fdb157"
       
-    - title : "Logo Design"
-      progress : "60%"
+    - title : "Communication"
+      progress : "90%"
       color : "#9473e6"
       
-    - title : "After Effects"
-      progress : "80%"
+    - title : "Commercial Awareness"
+      progress : "85%"
       color : "#bdecf6"
       
-    - title : "Web App"
-      progress : "70%"
+    - title : "Techinical Skills: Excel, R, Python"
+      progress : "85%"
       color : "#ffbcaa"
 
 # experience
@@ -37,45 +37,45 @@ experience:
   enable : true
   title : "Experience"
   item: 
-    - logo : "images/experience/icon-1.png"
-      title : "Junior UX Designer"
-      company : "WEBEX"
-      duration : "Jan 2007 - Feb 2009"
+    - logo : "images/experience/CICC.jpg"
+      title : "Equity Research Intern"
+      company : "CICC"
+      duration : "June 2020 - Sep 2020"
       
-    - logo : "images/experience/icon-2.png"
-      title : "UX & UI Designer"
-      company : "AUGMEDIX"
-      duration : "Mar 2009 - Aug 2014"
+    - logo : "images/experience/GFXD.png"
+      title : "Private Equity Intern"
+      company : "GF Xinde Investment Management"
+      duration : "May 2019 - Aug 2019"
       
-    - logo : "images/experience/icon-1.png"
-      title : "Senior UI Designer"
-      company : "THEMEFISHER"
-      duration : "Sep 2014 - Present"
+    - logo : "images/experience/GFJJ.jpg"
+      title : "Research Intern"
+      company : "GF Fund Management"
+      duration : "Aug 2018 - Dec 2018"
 
 # education
 education:
   enable : true
   title : "Education"
   item:
-    - title : "Marters in UX Design"
-      year : "2006"
-      academy : "Masassusets Institute of Technology"
+    - title : "Marters in Financial Analytics"
+      year : "2020"
+      academy : "London Business School, United Kingdom"
       
-    - title : "Honours in Fine Arts"
-      year : "2004"
-      academy : "Harvard University"
+    - title : "Bachelor in Management, Financial Management"
+      year : "2019"
+      academy : "Sun Yat-sen University, China"
       
-    - title : "Higher Secondary Certificat"
-      year : "2000"
-      academy : "Cardiff School"
+    - title : "Semester Exchange"
+      year : "2017"
+      academy : "WHU - Otto Beisheim School of Management, Germany"
       
-    - title : "Secondary School Certificate"
-      year : "1998"
-      academy : "Cardiff School"
+    - title : "Higher Secondary School Certificate"
+      year : "2015"
+      academy : "Guangdong Guangya High School, China"
 
 # service
 service:
-  enable : true
+  enable : false
   title : "Services"
   item:
     - title : "UI Design"
@@ -122,7 +122,7 @@ testimonial:
 
 # client logo slider
 clients_logo_slider:
-  enable : true
+  enable : false
   item:
     - logo : "images/clients-logo/client-logo-1.png"
       URL : "http://examplesite.com"

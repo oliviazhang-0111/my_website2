@@ -3,7 +3,7 @@ baseURL = "https://oliviazhang-personal.netlify.app/"
 languageCode = "en-us"
 summaryLength = "10"
 theme = "kross-hugo"
-title = "Kross"
+title = "Olivia's"
 
 # css plugins
 [[params.plugins.css]]
@@ -57,10 +57,10 @@ logo = ""
 theme_color = "#41228e"
 # contact info
 phone = "+880 2544 658 256"
-email = "steve.fruits@email.com"
-address = "125/A, CA Commercial Area, California, USA"
+email = "ozhang.mfa2021@london.edu"
+address = "London Business School, Regent’s Park, London, NW1 4SA, United Kingdom "
 # meta description
-author = "Johnathan Smith"
+author = "Xuan(Olivia) Zhang"
 description = "This is meta description"
 # google analytics
 google_analytics_id = "" # Your ID

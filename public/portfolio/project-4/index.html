@@ -290,7 +290,7 @@
 <li>Is business travel ready (binary)</li>
 <li>Instant bookable (binary)</li>
 </ul>
-<p>We can see that most variables in the short-listed dataset are <code>categorical</code> i.e. can take one of a limited number of observations. Some of these are <code>numeric</code>, some are <code>character</code> and some are <code>binary</code> (can either be TRUE or FALSE)</p>
+<p>We can see that most variables in the short-listed dataset are <code>categorical</code> i.e. can take one of a limited number of observations. Some of these are <code>numeric</code>, some are <code>character</code> and some are <code>binary</code> (can either be TRUE or FALSE).</p>
 <div id="cleaning-the-data" class="section level2">
 <h2>Cleaning the data:</h2>
 <pre class="r"><code>ggplot(hk_listings_clean, aes(x = minimum_nights)) + #Check for the most common values in minimum_nights
@@ -301,71 +301,6 @@
        title = &quot;Most common value for &#39;minimum nights&#39; is under 4&quot;) +
   theme_bw()</code></pre>
 <p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-5-1.png" width="800" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>skim(hk_listings_clean$cleaning_fee) #Checking for the number of N/As in &#39;cleaning fee&#39;</code></pre>
-<table>
-<caption><span id="tab:unnamed-chunk-6">Table 1: </span>Data summary</caption>
-<tbody>
-<tr class="odd">
-<td align="left">Name</td>
-<td align="left">hk_listings_clean$cleanin…</td>
-</tr>
-<tr class="even">
-<td align="left">Number of rows</td>
-<td align="left">11187</td>
-</tr>
-<tr class="odd">
-<td align="left">Number of columns</td>
-<td align="left">1</td>
-</tr>
-<tr class="even">
-<td align="left">_______________________</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">Column type frequency:</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">character</td>
-<td align="left">1</td>
-</tr>
-<tr class="odd">
-<td align="left">________________________</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">Group variables</td>
-<td align="left">None</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Variable type: character</strong></p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">skim_variable</th>
-<th align="right">n_missing</th>
-<th align="right">complete_rate</th>
-<th align="right">min</th>
-<th align="right">max</th>
-<th align="right">empty</th>
-<th align="right">n_unique</th>
-<th align="right">whitespace</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">data</td>
-<td align="right">5055</td>
-<td align="right">0.55</td>
-<td align="right">5</td>
-<td align="right">9</td>
-<td align="right">0</td>
-<td align="right">259</td>
-<td align="right">0</td>
-</tr>
-</tbody>
-</table>
 <pre class="r"><code>hk_listings_clean &lt;- hk_listings_clean %&gt;%
   mutate(cleaning_fee = parse_number(cleaning_fee), #Changing the type of data from character to numeric
          extra_people = parse_number(extra_people),
@@ -477,6 +412,7 @@ glimpse(hk_listings_clean)</code></pre>
 </div>
 <div id="create-the-simplified-neighbourhood" class="section level3">
 <h3>Create the simplified neighbourhood</h3>
+<p>Also, we re-categorize the neighborhood data into three main categories: Hong Kong Island, Kowloon and New Territories to simplify analysis</p>
 <pre class="r"><code>hk_listings_clean &lt;- hk_listings_clean %&gt;%
   mutate(neighbourhood_simplified = case_when(
     neighbourhood_cleansed == &quot;Sham Shui Po&quot; |

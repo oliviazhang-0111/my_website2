@@ -87,7 +87,7 @@ Categorical:
 - Is business travel ready (binary)
 - Instant bookable (binary)
 
-We can see that most variables in the short-listed dataset are `categorical` i.e. can take one of a limited number of observations. Some of these are `numeric`, some are `character` and some are `binary` (can either be TRUE or FALSE)
+We can see that most variables in the short-listed dataset are `categorical` i.e. can take one of a limited number of observations. Some of these are `numeric`, some are `character` and some are `binary` (can either be TRUE or FALSE).
 
 ## Cleaning the data:
 
@@ -104,8 +104,6 @@ ggplot(hk_listings_clean, aes(x = minimum_nights)) + #Check for the most common 
 ```
 
 ```{r error = FALSE}
-
-skim(hk_listings_clean$cleaning_fee) #Checking for the number of N/As in 'cleaning fee'
 
 hk_listings_clean <- hk_listings_clean %>%
   mutate(cleaning_fee = parse_number(cleaning_fee), #Changing the type of data from character to numeric
@@ -171,6 +169,7 @@ glimpse(hk_listings_clean)
 
 ### Create the simplified neighbourhood
 
+Also, we re-categorize the neighborhood data into three main categories: Hong Kong Island, Kowloon and New Territories to simplify analysis
 ```{r}
 
 hk_listings_clean <- hk_listings_clean %>%

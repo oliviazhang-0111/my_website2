@@ -6,7 +6,7 @@ author: Olivia Zhang
 date: "2020-10-11T12:14:34+06:00"
 description: This is meta description.
 draft: false
-image: images/portfolio/life.jpg
+image: images/portfolio/finance.jpg
 title: Yield Curve inversion
 output:
   html_document:
@@ -55,8 +55,9 @@ Every so often, we hear warnings from commentators on the "inverted yield curve"
 
 In addition, many articles and commentators think that, e.g., [*Yield curve inversion is viewed as a harbinger of recession*](https://www.bloomberg.com/news/articles/2019-08-14/u-k-yield-curve-inverts-for-first-time-since-financial-crisis). One can always doubt whether inversions are truly a harbinger of recessions, and [use the attached parable on yield curve inversions](https://twitter.com/5_min_macro/status/1161627360946511873).
 
-In our case we will look at US data and use the [FRED database](https://fred.stlouisfed.org/) to download historical yield curve rates, and plot the yield curves since 1999 to see when the yield curves flatten. If you want to know more, a very nice article that explains the [yield curve is and its inversion can be found here](https://fredblog.stlouisfed.org/2018/10/the-data-behind-the-fear-of-yield-curve-inversions/). At the end of this challenge you should produce this chart
+In our case we will look at US data and use the [FRED database](https://fred.stlouisfed.org/) to download historical yield curve rates, and plot the yield curves since 1999 to see when the yield curves flatten. If you want to know more, a very nice article that explains the [yield curve is and its inversion can be found here](https://fredblog.stlouisfed.org/2018/10/the-data-behind-the-fear-of-yield-curve-inversions/). 
 
+### Data preparation
 First, we will use the `tidyquant` package to download monthly rates for different durations. 
 
 ```{r get_rates, warning=FALSE}
@@ -105,9 +106,9 @@ glimpse(df)
 
 Our dataframe `df` has three columns (variables):
 
-- `symbol`: the FRED database ticker symbol
-- `date`: already a date object
-- `price`: the actual yield on that date
+1. `symbol`: the FRED database ticker symbol
+2. `date`: already a date object
+3. `price`: the actual yield on that date
 
 The first thing would be to join this dataframe `df` with the dataframe `mylookup` so we have a more readable version of maturities, durations, etc.
 
@@ -117,11 +118,9 @@ yield_curve <-left_join(df,mylookup,by="symbol")
 
 ```
 
-## Plotting the yield curve
-
 ### Yields on US rates by duration since 1960
 
-```{r, fig.width = 11, dpi = 220}
+```{r}
 
 yield_curve$var <- factor(yield_curve$var, levels = c("3-Month Treasury Bill",
                                                       "6-Month Treasury Bill",
@@ -148,7 +147,7 @@ ggplot(yield_curve, aes(x = date, y = price, col = var)) +
 
 ### Monthly yields on US rates by duration since 1999 on a year-by-year basis  
 
-```{r, fig.width = 11, dpi = 220}
+```{r}
 
 yield_curve_99 <- yield_curve %>% 
   filter(date > ydm(19983112)) %>% 
@@ -169,7 +168,7 @@ ggplot(yield_curve_99) +
 
 ### 3-month and 10-year yields since 1999
 
-```{r, fig.width = 12, dpi = 220}
+```{r}
 
 yield_curve_99_spr <- yield_curve_99 %>% 
   filter(maturity == "3m" | maturity == "10y")
@@ -190,9 +189,9 @@ According to [Wikipedia's list of recession in the United States](https://en.wik
 
 Besides calculating the spread (10year - 3months), there are a few things we need to do to produce our final plot
 
-- Setup data for US recessions 
-- Superimpose recessions as the grey areas in our plot
-- Plot the spread between 10 years and 3 months as a blue/red ribbon, based on whether the spread is positive (blue) or negative(red)
+1. Setup data for US recessions 
+2. Superimpose recessions as the grey areas in our plot
+3. Plot the spread between 10 years and 3 months as a blue/red ribbon, based on whether the spread is positive (blue) or negative(red)
 
 
 - For the first, the code below creates a dataframe with all US recessions since 1946
@@ -213,10 +212,10 @@ recessions <- tibble(
 recessions
 ```
 
-- To add the grey shaded areas corresponding to recessions, we use `geom_rect()`
-- to colour the ribbons blue/red we must see whether the spread is positive or negative and then use `geom_ribbon()`. You should be familiar with this from last week's homework on the excess weekly/monthly rentals of Santander Bikes in London.
+1. To add the grey shaded areas corresponding to recessions, we use `geom_rect()`
+2. To colour the ribbons blue/red we must see whether the spread is positive or negative and then use `geom_ribbon()`. You should be familiar with this from last week's homework on the excess weekly/monthly rentals of Santander Bikes in London.
 
-```{r, fig.width = 15, dpi = 180}
+```{r}
 
 yield_spread <- yield_curve %>% 
   filter(maturity == "3m" | maturity  == "10y") %>% 

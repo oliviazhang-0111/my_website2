@@ -124,7 +124,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-5 mb-5">
-        <img src="/images/portfolio/life.jpg" class="img-fluid w-100" alt="Yield Curve inversion">
+        <img src="/images/portfolio/finance.jpg" class="img-fluid w-100" alt="Yield Curve inversion">
       </div>
       <div class="col-lg-7 mb-5 mb-lg-0 align-self-center">
         <div class="row mx-0">
@@ -156,7 +156,9 @@
 
 <p>Every so often, we hear warnings from commentators on the “inverted yield curve” and its predictive power with respect to recessions. An explainer what a <a href="https://www.reuters.com/article/us-usa-economy-yieldcurve-explainer/explainer-what-is-an-inverted-yield-curve-idUSKBN1O50GA">inverted yield curve is can be found here</a>. If you’d rather listen to something, here is a great podcast from <a href="https://www.podbean.com/media/share/dir-4zgj9-6aefd11">NPR on yield curve indicators</a></p>
 <p>In addition, many articles and commentators think that, e.g., <a href="https://www.bloomberg.com/news/articles/2019-08-14/u-k-yield-curve-inverts-for-first-time-since-financial-crisis"><em>Yield curve inversion is viewed as a harbinger of recession</em></a>. One can always doubt whether inversions are truly a harbinger of recessions, and <a href="https://twitter.com/5_min_macro/status/1161627360946511873">use the attached parable on yield curve inversions</a>.</p>
-<p>In our case we will look at US data and use the <a href="https://fred.stlouisfed.org/">FRED database</a> to download historical yield curve rates, and plot the yield curves since 1999 to see when the yield curves flatten. If you want to know more, a very nice article that explains the <a href="https://fredblog.stlouisfed.org/2018/10/the-data-behind-the-fear-of-yield-curve-inversions/">yield curve is and its inversion can be found here</a>. At the end of this challenge you should produce this chart</p>
+<p>In our case we will look at US data and use the <a href="https://fred.stlouisfed.org/">FRED database</a> to download historical yield curve rates, and plot the yield curves since 1999 to see when the yield curves flatten. If you want to know more, a very nice article that explains the <a href="https://fredblog.stlouisfed.org/2018/10/the-data-behind-the-fear-of-yield-curve-inversions/">yield curve is and its inversion can be found here</a>.</p>
+<div id="data-preparation" class="section level3">
+<h3>Data preparation</h3>
 <p>First, we will use the <code>tidyquant</code> package to download monthly rates for different durations.</p>
 <pre class="r"><code># Get a list of FRED codes for US rates and US yield curve; choose monthly frequency
 # to see, eg., the 3-month T-bill https://fred.stlouisfed.org/series/TB3MS
@@ -265,15 +267,14 @@ glimpse(df)</code></pre>
 ## $ date   &lt;date&gt; 1960-01-01, 1960-02-01, 1960-03-01, 1960-04-01, 1960-05-01,...
 ## $ price  &lt;dbl&gt; 4.35, 3.96, 3.31, 3.23, 3.29, 2.46, 2.30, 2.30, 2.48, 2.30, ...</code></pre>
 <p>Our dataframe <code>df</code> has three columns (variables):</p>
-<ul>
+<ol style="list-style-type: decimal">
 <li><code>symbol</code>: the FRED database ticker symbol</li>
 <li><code>date</code>: already a date object</li>
 <li><code>price</code>: the actual yield on that date</li>
-</ul>
+</ol>
 <p>The first thing would be to join this dataframe <code>df</code> with the dataframe <code>mylookup</code> so we have a more readable version of maturities, durations, etc.</p>
 <pre class="r"><code>yield_curve &lt;-left_join(df,mylookup,by=&quot;symbol&quot;) </code></pre>
-<div id="plotting-the-yield-curve" class="section level2">
-<h2>Plotting the yield curve</h2>
+</div>
 <div id="yields-on-us-rates-by-duration-since-1960" class="section level3">
 <h3>Yields on US rates by duration since 1960</h3>
 <pre class="r"><code>yield_curve$var &lt;- factor(yield_curve$var, levels = c(&quot;3-Month Treasury Bill&quot;,
@@ -296,7 +297,7 @@ ggplot(yield_curve, aes(x = date, y = price, col = var)) +
        y = &quot;%&quot;,
        caption = &quot;Source: St. Louis Federal Reserve Economic Database (FRED)&quot;,
        title = &quot;Yields on U.S. Treasury rates since 1960&quot;)</code></pre>
-<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-1-1.png" width="2420" style="display: block; margin: auto;" /></p>
+<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-1-1.png" width="648" style="display: block; margin: auto;" /></p>
 </div>
 <div id="monthly-yields-on-us-rates-by-duration-since-1999-on-a-year-by-year-basis" class="section level3">
 <h3>Monthly yields on US rates by duration since 1999 on a year-by-year basis</h3>
@@ -314,7 +315,7 @@ ggplot(yield_curve_99) +
        caption = &quot;Source: St. Louis Federal Reserve Economic Database (FRED)&quot;) +
   theme_bw() +
   theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-2-1.png" width="2420" style="display: block; margin: auto;" /></p>
+<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-2-1.png" width="648" style="display: block; margin: auto;" /></p>
 </div>
 <div id="month-and-10-year-yields-since-1999" class="section level3">
 <h3>3-month and 10-year yields since 1999</h3>
@@ -329,14 +330,16 @@ ggplot(yield_curve_99_spr, aes(x = date, y = price, group = var, colour = var)) 
        title = &quot;Yields on 3-Month and 10-Year US Treasury rates since 1999&quot;,
        caption = &quot;Source: St. Louis Federal Reserve Economic Database (FRED)&quot;) +
   theme(legend.title = element_blank())</code></pre>
-<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-3-1.png" width="2640" style="display: block; margin: auto;" /></p>
+<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
 <p>According to <a href="https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States">Wikipedia’s list of recession in the United States</a>, since 1999 there have been two recession in the US: between Mar 2001–Nov 2001 and between Dec 2007–June 2009. Does the yield curve seem to flatten before these recessions? Can a yield curve flattening really mean a recession is coming in the US? Since 1999, when did short-term (3 months) yield more than longer term (10 years) debt?</p>
 <p>Besides calculating the spread (10year - 3months), there are a few things we need to do to produce our final plot</p>
+<ol style="list-style-type: decimal">
+<li>Setup data for US recessions</li>
+<li>Superimpose recessions as the grey areas in our plot</li>
+<li>Plot the spread between 10 years and 3 months as a blue/red ribbon, based on whether the spread is positive (blue) or negative(red)</li>
+</ol>
 <ul>
-<li><p>Setup data for US recessions</p></li>
-<li><p>Superimpose recessions as the grey areas in our plot</p></li>
-<li><p>Plot the spread between 10 years and 3 months as a blue/red ribbon, based on whether the spread is positive (blue) or negative(red)</p></li>
-<li><p>For the first, the code below creates a dataframe with all US recessions since 1946</p></li>
+<li>For the first, the code below creates a dataframe with all US recessions since 1946</li>
 </ul>
 <pre class="r"><code># get US recession dates after 1946 from Wikipedia 
 # https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States
@@ -361,10 +364,10 @@ recessions</code></pre>
 ## 6 1990-07-01 1991-03-01 1990-07-01 1991-03-01 243 days     
 ## 7 2001-03-01 2001-11-01 2001-03-01 2001-11-01 245 days     
 ## 8 2007-12-01 2009-06-01 2007-12-01 2009-06-01 548 days</code></pre>
-<ul>
+<ol style="list-style-type: decimal">
 <li>To add the grey shaded areas corresponding to recessions, we use <code>geom_rect()</code></li>
-<li>to colour the ribbons blue/red we must see whether the spread is positive or negative and then use <code>geom_ribbon()</code>. You should be familiar with this from last week’s homework on the excess weekly/monthly rentals of Santander Bikes in London.</li>
-</ul>
+<li>To colour the ribbons blue/red we must see whether the spread is positive or negative and then use <code>geom_ribbon()</code>. You should be familiar with this from last week’s homework on the excess weekly/monthly rentals of Santander Bikes in London.</li>
+</ol>
 <pre class="r"><code>yield_spread &lt;- yield_curve %&gt;% 
   filter(maturity == &quot;3m&quot; | maturity  == &quot;10y&quot;) %&gt;% 
   subset(select = -c(symbol, maturity)) %&gt;%
@@ -397,8 +400,7 @@ ggplot(yield_spread, aes(x = date, y = diff)) +
        title = &quot;Yield Curve Inversion: 10-year minus 3-month Treasury rates&quot;,
        subtitle = &quot;Difference in % points monthly averages.\nShaded areas correspond to recessions&quot;,
        caption = &quot;Source: St. Louis Federal Reserve Economic Database (FRED)&quot;)</code></pre>
-<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-4-1.png" width="2700" style="display: block; margin: auto;" /></p>
-</div>
+<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
 </div>
 </div>
       </div>

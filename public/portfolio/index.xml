@@ -13,7 +13,7 @@
       <pubDate>Mon, 19 Oct 2020 12:14:34 +0600</pubDate>
       
       <guid>/portfolio/project-4/</guid>
-      <description>Exploratory Data Analysis (EDA)hk_listings &amp;lt;- vroom(&amp;quot;http://data.insideairbnb.com/china/hk/hong-kong/2020-06-15/data/listings.csv.gz&amp;quot;)At first glance, there are 11187 observations of 106 variables in the data set.</description>
+      <description>Introductionhk_listings &amp;lt;- vroom(&amp;quot;http://data.insideairbnb.com/china/hk/hong-kong/2020-06-15/data/listings.csv.gz&amp;quot;)At first glance, there are 11187 observations of 106 variables in the data set.</description>
     </item>
     
     <item>

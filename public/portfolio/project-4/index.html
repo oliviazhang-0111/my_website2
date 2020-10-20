@@ -156,8 +156,8 @@
         <div class="content">
 
 
-<div id="exploratory-data-analysis-eda" class="section level1">
-<h1>Exploratory Data Analysis (EDA)</h1>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
 <pre class="r"><code>hk_listings &lt;- vroom(&quot;http://data.insideairbnb.com/china/hk/hong-kong/2020-06-15/data/listings.csv.gz&quot;)</code></pre>
 <p>At first glance, there are <code>11187</code> observations of 106 variables in the data set. To improve efficiency, we carefully went through the list and selected <code>28</code> variables that we believe are most relevant to the following analysis.</p>
 <pre class="r"><code>glimpse(hk_listings)</code></pre>
@@ -291,8 +291,9 @@
 <li>Instant bookable (binary)</li>
 </ul>
 <p>We can see that most variables in the short-listed dataset are <code>categorical</code> i.e. can take one of a limited number of observations. Some of these are <code>numeric</code>, some are <code>character</code> and some are <code>binary</code> (can either be TRUE or FALSE).</p>
-<div id="cleaning-the-data" class="section level2">
-<h2>Cleaning the data:</h2>
+</div>
+<div id="cleaning-the-data" class="section level3">
+<h3>Cleaning the data:</h3>
 <pre class="r"><code>ggplot(hk_listings_clean, aes(x = minimum_nights)) + #Check for the most common values in minimum_nights
   geom_density() +
   xlim(0, 40) +
@@ -356,8 +357,8 @@ glimpse(hk_listings_clean)</code></pre>
 <p>After skimming the cleaning_fee variable, we see that there are <code>5055</code> missing values. We look at why there could be missing values for the ‘cleaning fee’. The reason could be that cleaning services were never used for the property and hence a price could not be stated. However, this does not mean that cleaning fee is 0. We therefore, decided to change all the missing values for the cleaning fee to <code>$97</code> which is the average of the observations for ‘cleaning fee’. Hence, this could be thought of as the expected cleaning fee.</p>
 <p>Next, if we look at the density plot for ‘minimum nights’, it is clear that the observations are concentrated <code>under 4</code>, there is a also a lot of observations <code>around 29</code>. Since we want to analyse the property prices for <code>travel purposes only</code>, it makes sense to only include the observations that are below 4. This is because that way we capture most of the observations and also exclude observations concentrated around 29, which are clearly intended for non-travel purposes and would hence, not be applicable to our analysis. The values of around 29 could be explained by the hosts attempting to rent-out the property through Airbnb as the minimum stay is 1 month. This could apply to students staying for term-time or people living in the city for a prolonged period of time i.e. 1 month to a year.</p>
 <p>As a final step in cleaning the data, we remove the <code>missing values</code> from variables such as number of beds/bedrooms/bathrooms, these <code>N/As</code> would have a corresponding value of 0, and could thus be useful for the analysis. In addition, we exclude the properties with values of $0, as these observations could be mistakes and could impact our regression analysis.</p>
-<div id="solve-outliers" class="section level3">
-<h3>Solve outliers:</h3>
+<div id="solve-outliers" class="section level4">
+<h4>Solve outliers:</h4>
 <p>There are 33 types of <code>property_type</code> in the data set. To take a closer look, we use a bar chart to show the number of listings in each <code>property_type</code>.</p>
 <pre class="r"><code>property &lt;- hk_listings_clean %&gt;% 
   group_by(property_type) %&gt;% 
@@ -410,8 +411,8 @@ glimpse(hk_listings_clean)</code></pre>
 ## $ cancellation_policy       &lt;chr&gt; &quot;strict_14_with_grace_period&quot;, &quot;strict_14...
 ## $ prop_type_simplified      &lt;chr&gt; &quot;Apartment&quot;, &quot;Apartment&quot;, &quot;Apartment&quot;, &quot;A...</code></pre>
 </div>
-<div id="create-the-simplified-neighbourhood" class="section level3">
-<h3>Create the simplified neighbourhood</h3>
+<div id="create-the-simplified-neighbourhood" class="section level4">
+<h4>Create the simplified neighbourhood</h4>
 <p>Also, we re-categorize the neighborhood data into three main categories: Hong Kong Island, Kowloon and New Territories to simplify analysis</p>
 <pre class="r"><code>hk_listings_clean &lt;- hk_listings_clean %&gt;%
   mutate(neighbourhood_simplified = case_when(
@@ -428,10 +429,10 @@ glimpse(hk_listings_clean)</code></pre>
   ))</code></pre>
 </div>
 </div>
-<div id="exploring-the-data" class="section level2">
-<h2>Exploring the data:</h2>
-<div id="the-price" class="section level3">
-<h3>The Price</h3>
+<div id="exploring-the-data" class="section level3">
+<h3>Exploring the data:</h3>
+<div id="the-price" class="section level4">
+<h4>The Price</h4>
 <p>Booking a room on Airbnb, we have three kind of charges to consider: <code>price</code> for room price, <code>extra_people</code> for extra people charge, <code>cleaning_fee</code> for cleaning charges. From the density graphs below, we can see that the prices are extremely right skewed, which makes senses as rooms in the city centre could be unbelievably expensive. The log price distribution would look closer to a normal distribution, which will be shown in the Regression analysis for the price of 4-night stay.</p>
 <pre class="r"><code>hk_listings_clean %&gt;%
   select(`Room price` = price, `Extra people charge` = extra_people, `Cleaning fee` = cleaning_fee) %&gt;% 
@@ -462,8 +463,8 @@ glimpse(hk_listings_clean)</code></pre>
   theme_bw()</code></pre>
 <p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-10-2.png" width="800" style="display: block; margin: auto;" /></p>
 </div>
-<div id="the-location" class="section level3">
-<h3>The location</h3>
+<div id="the-location" class="section level4">
+<h4>The location</h4>
 <p>Locations are important. According to the graphs below, Kowloon has the most number of rooms but has the cheapest room price. On the other hand, rooms in Hong Kong island is the most expensive.</p>
 <pre class="r"><code>hk_listings_clean %&gt;% 
   select(location = neighbourhood_simplified) %&gt;% 
@@ -491,8 +492,8 @@ glimpse(hk_listings_clean)</code></pre>
   theme(legend.title = element_blank())</code></pre>
 <p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-11-2.png" width="800" style="display: block; margin: auto;" /></p>
 </div>
-<div id="the-host" class="section level3">
-<h3>The host</h3>
+<div id="the-host" class="section level4">
+<h4>The host</h4>
 <p>In Hong Kong, 24% of the hosts are <code>super hosts</code>. Most hosts respond and accept actively, and have less than 50 listings on Airbnb.</p>
 <pre class="r"><code>hk_listings_clean %&gt;%
   select(host_is_superhost) %&gt;% 
@@ -536,8 +537,8 @@ glimpse(hk_listings_clean)</code></pre>
   theme(legend.title = element_blank())</code></pre>
 <p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-12-3.png" width="800" style="display: block; margin: auto;" /></p>
 </div>
-<div id="the-room" class="section level3">
-<h3>The room</h3>
+<div id="the-room" class="section level4">
+<h4>The room</h4>
 <p>We expect that the number of <code>accommodates, bathrooms, bedrooms, beds</code> will have an impact on the price of the property, so we can plot a graph to check:</p>
 <pre class="r"><code>hk_listings_clean %&gt;%
   select(accommodates, bathrooms, bedrooms, beds, price) %&gt;% 
@@ -582,8 +583,8 @@ glimpse(hk_listings_clean)</code></pre>
   theme(legend.title = element_blank())</code></pre>
 <p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-14-2.png" width="800" style="display: block; margin: auto;" /></p>
 </div>
-<div id="the-ratings" class="section level3">
-<h3>The ratings</h3>
+<div id="the-ratings" class="section level4">
+<h4>The ratings</h4>
 <p>Another factor that could have an impact on the price is the <code>review rating</code> and <code>the number of ratings</code>:</p>
 <pre class="r"><code>hk_listings_clean %&gt;%
   select(`Review rating` = review_scores_rating, `Review number` =number_of_reviews, price) %&gt;% 
@@ -605,8 +606,8 @@ paste0(&quot;The correlation between rating and price is &quot;, round(corr_rat,
 <pre><code>## [1] &quot;The correlation between rating and price is 0.07&quot;</code></pre>
 <p>Here, we can see that there is <code>no correlation</code> between the <code>review rating</code> and the <code>price</code> of the property. This is indicated by scatter plot where no clear relationship can be seen and is further supported by the correlation output of <code>0.06</code> (almost 0).</p>
 </div>
-<div id="the-policy" class="section level3">
-<h3>The policy</h3>
+<div id="the-policy" class="section level4">
+<h4>The policy</h4>
 <p><code>Booking and canceling policies</code> could also have an impact on the price:</p>
 <pre class="r"><code># We reclassify `super_strict_30` and `super_strict_60` into `super strict`, to simplify analysis. 
 
@@ -643,7 +644,6 @@ hk_listings_clean %&gt;%
        caption = &quot;Source: Airbnb&quot;) +
   theme_bw()</code></pre>
 <p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-16-2.png" width="800" style="display: block; margin: auto;" /></p>
-</div>
 </div>
 </div>
 </div>

@@ -50,7 +50,7 @@ library(scales)
 ```
 
 
-# Exploratory Data Analysis (EDA)
+### Introduction
 ```{r error = FALSE}
 
 hk_listings <- vroom("http://data.insideairbnb.com/china/hk/hong-kong/2020-06-15/data/listings.csv.gz")
@@ -89,7 +89,7 @@ Categorical:
 
 We can see that most variables in the short-listed dataset are `categorical` i.e. can take one of a limited number of observations. Some of these are `numeric`, some are `character` and some are `binary` (can either be TRUE or FALSE).
 
-## Cleaning the data:
+### Cleaning the data:
 
 ```{r}
 
@@ -137,7 +137,7 @@ Next, if we look at the density plot for 'minimum nights', it is clear that the 
 
 As a final step in cleaning the data, we remove the `missing values` from variables such as number of beds/bedrooms/bathrooms, these `N/As` would have a corresponding value of 0, and could thus be useful for the analysis. In addition, we exclude the properties with values of $0, as these observations could be mistakes and could impact our regression analysis. 
 
-### Solve outliers:
+#### Solve outliers:
 
 There are 33 types of `property_type` in the data set. To take a closer look, we use a bar chart to show the number of listings in each `property_type`.
 
@@ -167,7 +167,7 @@ hk_listings_clean <- hk_listings_clean %>%
 glimpse(hk_listings_clean)
 ```
 
-### Create the simplified neighbourhood
+#### Create the simplified neighbourhood
 
 Also, we re-categorize the neighborhood data into three main categories: Hong Kong Island, Kowloon and New Territories to simplify analysis
 ```{r}
@@ -188,9 +188,9 @@ hk_listings_clean <- hk_listings_clean %>%
 ```
 
 
-## Exploring the data:
+### Exploring the data:
 
-### The Price
+#### The Price
 
 Booking a room on Airbnb, we have three kind of charges to consider: `price` for room price, `extra_people` for extra people charge, `cleaning_fee` for cleaning charges. From the density graphs below, we can see that the prices are extremely right skewed, which makes senses as rooms in the city centre could be unbelievably expensive. The log price distribution would look closer to a normal distribution, which will be shown in the Regression analysis for the price of 4-night stay.
 
@@ -225,7 +225,7 @@ hk_listings_clean %>%
 
 ```
 
-### The location
+#### The location
 
 Locations are important. According to the graphs below, Kowloon has the most number of rooms but has the cheapest room price. On the other hand, rooms in Hong Kong island is the most expensive.
 
@@ -258,7 +258,7 @@ hk_listings_clean %>%
 ```
 
 
-### The host
+#### The host
 
 In Hong Kong, `r percent(length(which(hk_listings_clean$host_is_superhost))/length(hk_listings_clean$host_is_superhost))` of the hosts are `super hosts`. Most hosts respond and accept actively, and have less than 50 listings on Airbnb.
 
@@ -306,7 +306,7 @@ hk_listings_clean %>%
   theme(legend.title = element_blank())
 ```
 
-### The room
+#### The room
 
 We expect that the number of `accommodates, bathrooms, bedrooms, beds` will have an impact on the price of the property, so we can plot a graph to check:  
 
@@ -357,7 +357,7 @@ hk_listings_clean %>%
   theme(legend.title = element_blank())
 ```
 
-### The ratings
+#### The ratings
 Another factor that could have an impact on the price is the `review rating` and `the number of ratings`:  
 ```{r}
 
@@ -383,7 +383,7 @@ paste0("The correlation between rating and price is ", round(corr_rat,2))
 
 Here, we can see that there is `no correlation` between the `review rating` and the `price` of the property. This is indicated by scatter plot where no clear relationship can be seen and is further supported by the correlation output of `0.06` (almost 0).
 
-### The policy
+#### The policy
 
 `Booking and canceling policies` could also have an impact on the price:
 

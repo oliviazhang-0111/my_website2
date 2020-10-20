@@ -89,16 +89,16 @@ map_marker = "images/marker.png"
 # social site
 [[params.social]]
 icon = "ti-facebook"
-URL = "#"
+URL = "https://www.facebook.com/profile.php?id=100006386222416"
+
+[[params.social]]
+icon = "ti-linkedin"
+URL = "https://www.linkedin.com/in/olivia-xuan-zhang/"
+
+[[params.social]]
+icon = "ti-github"
+URL = "https://github.com/oliviazhang-0111"
 
 [[params.social]]
 icon = "ti-instagram"
-URL = "#"
-
-[[params.social]]
-icon = "ti-dribbble"
-URL = "#"
-
-[[params.social]]
-icon = "ti-twitter-alt"
-URL = "#"
+URL = "https://www.instagram.com/oliviacheung_/"

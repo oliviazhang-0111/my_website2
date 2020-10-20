@@ -73,14 +73,6 @@
         
         
         <li class="nav-item ">
-          <a class="nav-link" href="/blog">Blog</a>
-        </li>
-        
-        
-        
-        
-        
-        <li class="nav-item ">
           <a class="nav-link" href="/portfolio">Portfolio</a>
         </li>
         
@@ -154,6 +146,8 @@
         <div class="content">
 
 
+<div id="at-first-glance" class="section level2">
+<h2>At first glance:</h2>
 <p>Back in 2014, <a href="https://fivethirtyeight.com/features/dear-mona-followup-where-do-people-drink-the-most-beer-wine-and-spirits/">fivethiryeight.com</a> published an article on alchohol consumption in different countries. The data <code>drinks</code> is available as part of the <code>fivethirtyeight</code> package. To get the data we install the <code>fivethirtyeight</code> package and upload the data.</p>
 <pre class="r"><code>library(fivethirtyeight)
 data(drinks)</code></pre>
@@ -302,6 +296,7 @@ data(drinks)</code></pre>
 </table>
 <p>We can see that there are only 5 variables, out of which 4 are numeric and 1 is character type. Also the <em>n_missing</em> is 0 for all variables, so there are no missing values (NAs) to worry about.</p>
 <p>Now, as we skinned the data set, we can proceed to visualization of countries arranged by number of servings. We have three main categories of drinks: beer, wine and spirits. Let’s visualize them one by one:</p>
+</div>
 <div id="beer" class="section level2">
 <h2>Beer:</h2>
 <pre class="r"><code># get the top 25 countries

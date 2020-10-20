@@ -1,0 +1,426 @@
+---
+categories:
+- data analytics
+author: Group A8 (Benedikt Jaletzke, Stanislav Makarov, Mark Negodyuk, Olivia Zhang, Tom Tian, Kateryna Tarasova)
+date: "2020-10-19T12:14:34+06:00"
+description: This is meta description.
+draft: false
+image: images/portfolio/airbnb.jpg
+title: Airbnb in Hong Kong - EDA
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE, 
+  warning = FALSE, 
+  tidy=FALSE,     # display code as typed
+  size="small")   # slightly smaller font for code
+options(digits = 3)
+
+# default figure size
+knitr::opts_chunk$set(
+  fig.width=8, 
+  fig.height=6,
+  dpi = 100, 
+  fig.align = "center"
+)
+```
+
+```{r echo = FALSE}
+library(vroom)
+library(tidyverse)
+library(skimr)
+library(leaflet)
+library(sp)
+library(rgdal)
+library(huxtable)
+library(mosaic)
+library(ggpubr)
+library(scales)
+```
+
+
+# Exploratory Data Analysis (EDA)
+```{r error = FALSE}
+
+hk_listings <- vroom("http://data.insideairbnb.com/china/hk/hong-kong/2020-06-15/data/listings.csv.gz")
+```
+
+At first glance, there are `11187` observations of 106 variables in the data set. To improve efficiency, we carefully went through the list and selected `28` variables that we believe are most relevant to the following analysis. 
+```{r}
+glimpse(hk_listings)
+```
+```{r}
+hk_listings_clean <- hk_listings %>% 
+  subset(select = c(listing_url, host_id, host_response_time, host_response_rate, host_acceptance_rate, host_is_superhost, host_total_listings_count, neighbourhood_cleansed, latitude, longitude, property_type, room_type, is_location_exact, accommodates, bedrooms, bathrooms, beds, price, cleaning_fee, guests_included, extra_people, minimum_nights, maximum_nights, review_scores_rating, number_of_reviews, is_business_travel_ready, instant_bookable, cancellation_policy))
+
+```
+
+By glimpsing the new dataset we can straight away see some of the issues that need to be addressed such as a large number of `missing values` (N/As) as well as a few variables where observations are of `character` type but should be of `numeric` types. This includes important variables such as 'cleaning fee', 'extra people' and 'price'. 
+
+In addition, there are some variables that are `categorical`, such as for example: 'minimum or maximum nights' which are numeric variables or 'room or property type' which are character variables. There are also binary variables such as 'instant bookable' and 'business travel ready'. The full list is as follows:
+
+Categorical:
+
+- Host response time (character)
+- Host response rate (numeric)
+- Host acceptance rate (numeric)
+- Host is super host (binary)
+- Neighborhood cleansed (character)
+- Latitude (numeric)
+- Longitude (numeric)
+- Property type (character)
+- Room type (character)
+- Is location exact (binary)
+- Minimum/Maximum nights (numeric)
+- Review score rating (numeric)
+- Is business travel ready (binary)
+- Instant bookable (binary)
+
+We can see that most variables in the short-listed dataset are `categorical` i.e. can take one of a limited number of observations. Some of these are `numeric`, some are `character` and some are `binary` (can either be TRUE or FALSE)
+
+## Cleaning the data:
+
+```{r}
+
+ggplot(hk_listings_clean, aes(x = minimum_nights)) + #Check for the most common values in minimum_nights
+  geom_density() +
+  xlim(0, 40) +
+  labs(y = "Density",
+       x = "Minimum Nights",
+       title = "Most common value for 'minimum nights' is under 4") +
+  theme_bw()
+
+```
+
+```{r error = FALSE}
+
+skim(hk_listings_clean$cleaning_fee) #Checking for the number of N/As in 'cleaning fee'
+
+hk_listings_clean <- hk_listings_clean %>%
+  mutate(cleaning_fee = parse_number(cleaning_fee), #Changing the type of data from character to numeric
+         extra_people = parse_number(extra_people),
+         price = parse_number(price),
+         host_response_rate = parse_number(host_response_rate),
+         host_acceptance_rate = parse_number(host_acceptance_rate)) %>% 
+  mutate(cleaning_fee = case_when( #Changing N/As in the cleaning_fee to 97 (average cleaning fee => Expected cleaning fee?)
+    is.na(cleaning_fee) ~ 97, 
+    TRUE ~ cleaning_fee)) %>% 
+  filter(minimum_nights <= 4 & #filter for minimum stay of under 4 and maximum under 30 to filter for accommodation used for travel purposes only
+         !is.na(bedrooms) &
+         !is.na(bathrooms) & #There are missing values in `bedrooms`, `bathrooms`, `beds`. As rooms with no bedrooms/bathrooms/beds would have a corresponding value of 0, we should drop these NAs.
+         !is.na(beds) &
+         !is.na(review_scores_rating) &
+         price != 0) #'review_scores_rating' also has N/As, these will have corresponding value of 0.
+    
+hk_listings_clean <- hk_listings_clean %>%
+  filter(!is.na(host_response_rate) &
+         !is.na(host_acceptance_rate)) #filter out N/As in the 'host response rate' and 'host acceptance rate'
+
+glimpse(hk_listings_clean)
+
+```
+
+Here, we first changed some of the variable types to `numeric`. This includes variables such as 'price', 'extra people' and 'cleaning fee' which were previously character types.
+
+After skimming the cleaning_fee variable, we see that there are `5055` missing values. We look at why there could be missing values for the 'cleaning fee'. The reason could be that cleaning services were never used for the property and hence a price could not be stated. However, this does not mean that cleaning fee is 0. We therefore, decided to change all the missing values for the cleaning fee to `$97` which is the average of the observations for 'cleaning fee'. Hence, this could be thought of as the expected cleaning fee.
+
+Next, if we look at the density plot for 'minimum nights', it is clear that the observations are concentrated `under 4`, there is a also a lot of observations `around 29`. Since we want to analyse the property prices for `travel purposes only`, it makes sense to only include the observations that are below 4. This is because that way we capture most of the observations and also exclude observations concentrated around 29, which are clearly intended for non-travel purposes and would hence, not be applicable to our analysis. The values of around 29 could be explained by the hosts attempting to rent-out the property through Airbnb as the minimum stay is 1 month. This could apply to students staying for term-time or people living in the city for a prolonged period of time i.e. 1 month to a year. 
+
+As a final step in cleaning the data, we remove the `missing values` from variables such as number of beds/bedrooms/bathrooms, these `N/As` would have a corresponding value of 0, and could thus be useful for the analysis. In addition, we exclude the properties with values of $0, as these observations could be mistakes and could impact our regression analysis. 
+
+### Solve outliers:
+
+There are 33 types of `property_type` in the data set. To take a closer look, we use a bar chart to show the number of listings in each `property_type`.
+
+```{r}
+property <- hk_listings_clean %>% 
+  group_by(property_type) %>% 
+  count() %>% 
+  arrange(desc(n))
+
+ggplot(property, aes(y = reorder(property_type, n), x = n)) +
+  geom_col() +
+  labs(y = "",
+       x = "Count",
+       title = "Count of property types") +
+  theme_minimal()
+```
+
+We can see from the above graph that most property type is a `categorical` variables and the most common property types are `Apartment`, `Condo`, `Serviced Apartment`, `Hostel` and `Guesthouse`. The top 5 types make up 82% of total listings. Therefore, we simplify the `property_type` to have top 5 types and others to `prop_type_simplified`.
+
+```{r}
+
+hk_listings_clean <- hk_listings_clean %>%
+  mutate(prop_type_simplified = case_when(
+    property_type %in% c("Apartment","Condominium", "Serviced apartment", "Hostel", "Guesthouse") ~ property_type, 
+    TRUE ~ "Other"))
+
+glimpse(hk_listings_clean)
+```
+
+### Create the simplified neighbourhood
+
+```{r}
+
+hk_listings_clean <- hk_listings_clean %>%
+  mutate(neighbourhood_simplified = case_when(
+    neighbourhood_cleansed == "Sham Shui Po" |
+      neighbourhood_cleansed == "Yau Tsim Mong" |
+      neighbourhood_cleansed == "Kowloon City" |
+      neighbourhood_cleansed == "Wong Tai Sin" |
+      neighbourhood_cleansed == "Kwun Tong"  ~ "Kowloon",
+    neighbourhood_cleansed == "Central & Western" |
+      neighbourhood_cleansed == "Eastern" |
+      neighbourhood_cleansed == "Southern"|
+      neighbourhood_cleansed == "Wan Chai"~ "Hong Kong Island",
+    TRUE ~ "New Territories"
+  ))
+```
+
+
+## Exploring the data:
+
+### The Price
+
+Booking a room on Airbnb, we have three kind of charges to consider: `price` for room price, `extra_people` for extra people charge, `cleaning_fee` for cleaning charges. From the density graphs below, we can see that the prices are extremely right skewed, which makes senses as rooms in the city centre could be unbelievably expensive. The log price distribution would look closer to a normal distribution, which will be shown in the Regression analysis for the price of 4-night stay.
+
+```{r}
+hk_listings_clean %>%
+  select(`Room price` = price, `Extra people charge` = extra_people, `Cleaning fee` = cleaning_fee) %>% 
+  pivot_longer(cols = 1:3, names_to = "charge_type", values_to = "value") %>% 
+  ggplot(aes(value)) +
+  geom_density() +
+  facet_wrap(~charge_type, scales = "free") +
+  labs(x = "$ Price",
+       y = "",
+       title = "Prices are extremely right skewed",
+       subtitle = "Distributions of prices and charges",
+       caption = "Source: Airbnb") +
+  theme_bw()
+
+hk_listings_clean %>%
+  select(`Room price` = price, `Extra people charge` = extra_people, `Cleaning fee` = cleaning_fee) %>% 
+  pivot_longer(cols = 1:3, names_to = "charge_type", values_to = "value") %>% 
+  mutate(value_log = log(value)) %>% 
+  filter(is.finite(value_log)) %>% 
+  ggplot(aes(value_log)) +
+  geom_density() +
+  facet_wrap(~charge_type, scales = "free") +
+  labs(x = "Log Price",
+       y = "", 
+       title = "Log prices are closer to normal distribtuions",
+       subtitle = "Distributions of log prices and log charges",
+       caption = "Source: Airbnb") +
+  theme_bw()
+
+```
+
+### The location
+
+Locations are important. According to the graphs below, Kowloon has the most number of rooms but has the cheapest room price. On the other hand, rooms in Hong Kong island is the most expensive.
+
+```{r}
+
+hk_listings_clean %>% 
+  select(location = neighbourhood_simplified) %>% 
+  ggplot(aes(x =location, fill = location)) +
+  geom_bar(alpha=0.5) +
+  labs(x = "",
+       y = "",
+       title = "Kowloon has the most number of rooms",
+       subtitle = "The number of Airbnb rooms on the three islands",
+       caption = "Source: Airbnb") +
+  theme_bw() +
+  theme(legend.title = element_blank())
+
+hk_listings_clean %>% 
+  select(Location = neighbourhood_simplified, price) %>% 
+  ggplot(aes(x = price, fill = Location)) +
+  geom_density(alpha=0.2) +
+  scale_x_log10() +
+  labs(x = "Log room price",
+       y = "",
+       title = "Rooms in Hong Kong island are the most expensive",
+       subtitle = "Distribution of log room price on the three islands",
+       caption = "Source: Airbnb") +
+  theme_bw() +
+  theme(legend.title = element_blank())
+```
+
+
+### The host
+
+In Hong Kong, `r percent(length(which(hk_listings_clean$host_is_superhost))/length(hk_listings_clean$host_is_superhost))` of the hosts are `super hosts`. Most hosts respond and accept actively, and have less than 50 listings on Airbnb.
+
+```{r}
+
+hk_listings_clean %>%
+  select(host_is_superhost) %>% 
+  mutate(`Super host` = ifelse(host_is_superhost, "Super host", "Non-super host")) %>% 
+  ggplot(aes(x = `Super host`, fill = `Super host`)) +
+  geom_bar() +
+  labs(x = "",
+       y = "",
+       title = "Most hosts respond within an hour",
+       subtitle = "Distributions of respond time",
+       caption = "Source: Airbnb") +
+  theme_bw() +
+  theme(legend.title = element_blank())
+
+hk_listings_clean %>%
+  select(`Response rate` = host_response_rate, `Acceptance rate` = host_acceptance_rate, `Total listings` = host_total_listings_count, host_is_superhost) %>%
+  mutate(`Super host` = ifelse(host_is_superhost, "Super host", "Non-super host")) %>% 
+  pivot_longer(cols = 1:3, names_to = "host_data", values_to = "value") %>% 
+  ggplot(aes(x = value, fill = `Super host`)) +
+  geom_histogram() +
+  facet_wrap(~host_data, scales = "free") +
+  labs(x = "",
+       y = "",
+       title = "Most hosts respond actively, and have listings lower than 50",
+       subtitle = "Distributions of acceptance rate, response rate and total number of listings",
+       caption = "Source: Airbnb") +
+  theme_bw() + 
+  theme(legend.title = element_blank())
+
+hk_listings_clean %>%
+  select(host_response_time, host_is_superhost) %>% 
+  mutate(`Super host` = ifelse(host_is_superhost, "Super host", "Non-super host")) %>% 
+  ggplot(aes(x = host_response_time, fill = `Super host`)) +
+  geom_bar() +
+  labs(x = "",
+       y = "",
+       title = "Most hosts respond within an hour",
+       subtitle = "Distributions of respond time",
+       caption = "Source: Airbnb") +
+  theme_bw() +
+  theme(legend.title = element_blank())
+```
+
+### The room
+
+We expect that the number of `accommodates, bathrooms, bedrooms, beds` will have an impact on the price of the property, so we can plot a graph to check:  
+
+```{r}
+hk_listings_clean %>%
+  select(accommodates, bathrooms, bedrooms, beds, price) %>% 
+  pivot_longer(cols = 1:4, names_to = "room_data", values_to = "value") %>% 
+  ggplot(aes(x = value, y = price)) +
+  geom_point(size = 1) +
+  geom_smooth(method = "lm", color="orange") +
+  facet_wrap(~room_data, scales = "free", ncol = 2) +
+  ylim(0, 2000) + #set limit at $2000 to exclude outliers on the graph
+  labs(x = "",
+       y = "",
+       title = "The number of accommodates, bathrooms, bedrooms and beds \n is positively correlated with price",
+       subtitle = "",
+       caption = "Source: Airbnb") +
+  theme_bw()
+```
+
+We also think the `type of room and property` will have an impact on the price, so we can plot a graph to check:
+
+```{r}
+hk_listings_clean %>% 
+  select(room_type, price) %>% 
+  ggplot(aes(x = price, fill = reorder(room_type, desc(price)))) +
+  geom_density(alpha=0.2) +
+  scale_x_log10() +
+  labs(x = "Log price",
+       y = "",
+       title = "Entire homes are the most expensive on average, while shared rooms are the cheapest",
+       subtitle = "Distribution of log room price for different room types",
+       caption = "Source: Airbnb") +
+  theme_bw() +
+  theme(legend.title = element_blank())
+
+hk_listings_clean %>% 
+  select(property_type, price) %>% 
+  ggplot(aes(x = price, fill = factor(property_type, levels = c("Apartment","Condominium", "Serviced apartment","Hostel", "Guesthouse", "Other")))) +
+  geom_density(alpha=0.2) +
+  scale_x_log10() +
+  labs(x = "Log price",
+       y = "",
+       title = "Apartments and houses are more likely to be expensive",
+       subtitle = "Distribution of log room price for different property types",
+       caption = "Source: Airbnb") +
+  theme_bw() +
+  theme(legend.title = element_blank())
+```
+
+### The ratings
+Another factor that could have an impact on the price is the `review rating` and `the number of ratings`:  
+```{r}
+
+hk_listings_clean %>%
+  select(`Review rating` = review_scores_rating, `Review number` =number_of_reviews, price) %>% 
+  pivot_longer(cols = 1:2, names_to = "review_data", values_to = "value") %>% 
+  ggplot(aes(x = value, y = price)) +
+  geom_point(size = 1) +
+  geom_smooth(method = "lm", color="orange") +
+  facet_wrap(~review_data, scales = "free", ncol = 2) +
+  labs(x = "",
+       y = "$ Price",
+       title = "Reviews have no obvious relationship with room price",
+       subtitle = "",
+       caption = "Source: Airbnb") +
+  theme_bw()
+
+corr_rat <- cor(hk_listings_clean$review_scores_rating, hk_listings_clean$price) #Checking the correlation between the 2 variables
+
+paste0("The correlation between rating and price is ", round(corr_rat,2))
+
+```
+
+Here, we can see that there is `no correlation` between the `review rating` and the `price` of the property. This is indicated by scatter plot where no clear relationship can be seen and is further supported by the correlation output of `0.06` (almost 0).
+
+### The policy
+
+`Booking and canceling policies` could also have an impact on the price:
+
+```{r}
+
+# We reclassify `super_strict_30` and `super_strict_60` into `super strict`, to simplify analysis. 
+
+hk_listings_clean %>%
+  select(cancellation_policy, price) %>% 
+  mutate(cancel = case_when(
+    cancellation_policy == 'strict_14_with_grace_period' ~ 'Strict',
+    cancellation_policy == 'moderate' ~ 'Moderate', 
+    cancellation_policy == 'flexible' ~ 'Flexible',
+    TRUE ~ 'Super strict'
+  )) %>% 
+  group_by(cancel) %>% 
+  summarise(mean = mean(price)) %>% 
+  ggplot(aes(x = mean, y = cancel)) +
+  geom_col(size = 1) +
+  labs(x = "Mean price",
+       y = "",
+       title = "Cancellation policy has an impact on price, but probably in a nonlinear way",
+       subtitle = "Mean price for different cancellation policies",
+       caption = "Source: Airbnb") +
+  theme_bw()
+
+hk_listings_clean %>%
+  select(instant_bookable, price) %>% 
+  mutate(book = ifelse(instant_bookable, "Instant book", "Non-instant book")) %>% 
+  group_by(book) %>% 
+  summarise(mean = mean(price)) %>% 
+  ggplot(aes(x = mean, y = book)) +
+  geom_col(size = 1) +
+  labs(x = "Mean price",
+       y = "",
+       title = "Non-instant book rooms are more expensive",
+       subtitle = "Mean price for different booking policies",
+       caption = "Source: Airbnb") +
+  theme_bw()
+```

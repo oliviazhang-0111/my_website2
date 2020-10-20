@@ -1,0 +1,575 @@
+---
+categories:
+- data analytics
+author: Group A8 (Benedikt Jaletzke, Stanislav Makarov, Mark Negodyuk, Olivia Zhang, Tom Tian, Kateryna Tarasova)
+date: "2020-10-19T12:14:34+06:00"
+description: This is meta description.
+draft: false
+image: images/portfolio/airbnb.jpg
+title: Airbnb in Hong Kong - EDA
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
+---
+
+
+
+<div id="exploratory-data-analysis-eda" class="section level1">
+<h1>Exploratory Data Analysis (EDA)</h1>
+<pre class="r"><code>hk_listings &lt;- vroom(&quot;http://data.insideairbnb.com/china/hk/hong-kong/2020-06-15/data/listings.csv.gz&quot;)</code></pre>
+<p>At first glance, there are <code>11187</code> observations of 106 variables in the data set. To improve efficiency, we carefully went through the list and selected <code>28</code> variables that we believe are most relevant to the following analysis.</p>
+<pre class="r"><code>glimpse(hk_listings)</code></pre>
+<pre><code>## Rows: 11,187
+## Columns: 106
+## $ id                                           &lt;dbl&gt; 69074, 75083, 103760, ...
+## $ listing_url                                  &lt;chr&gt; &quot;https://www.airbnb.co...
+## $ scrape_id                                    &lt;dbl&gt; 2.02e+13, 2.02e+13, 2....
+## $ last_scraped                                 &lt;date&gt; 2020-06-17, 2020-06-1...
+## $ name                                         &lt;chr&gt; &quot;Beautiful oasis of pl...
+## $ summary                                      &lt;chr&gt; &quot;An ideal Hong locatio...
+## $ space                                        &lt;chr&gt; &quot;Filled with plants an...
+## $ description                                  &lt;chr&gt; &quot;An ideal Hong locatio...
+## $ experiences_offered                          &lt;chr&gt; &quot;none&quot;, &quot;none&quot;, &quot;none&quot;...
+## $ neighborhood_overview                        &lt;chr&gt; &quot;In the upper part of ...
+## $ notes                                        &lt;chr&gt; NA, &quot;Once you arrive i...
+## $ transit                                      &lt;chr&gt; &quot;Buses pass often alon...
+## $ access                                       &lt;chr&gt; &quot;All access, except on...
+## $ interaction                                  &lt;chr&gt; &quot;If a guest is staying...
+## $ house_rules                                  &lt;chr&gt; &quot;Everything to make yo...
+## $ thumbnail_url                                &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ medium_url                                   &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ picture_url                                  &lt;chr&gt; &quot;https://a0.muscache.c...
+## $ xl_picture_url                               &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ host_id                                      &lt;dbl&gt; 160139, 304876, 304876...
+## $ host_url                                     &lt;chr&gt; &quot;https://www.airbnb.co...
+## $ host_name                                    &lt;chr&gt; &quot;Amy&quot;, &quot;Brend&quot;, &quot;Brend...
+## $ host_since                                   &lt;date&gt; 2010-07-07, 2010-11-3...
+## $ host_location                                &lt;chr&gt; &quot;Hong Kong&quot;, &quot;Hong Kon...
+## $ host_about                                   &lt;chr&gt; &quot;I&#39;ve been with AirBnB...
+## $ host_response_time                           &lt;chr&gt; &quot;within a few hours&quot;, ...
+## $ host_response_rate                           &lt;chr&gt; &quot;86%&quot;, &quot;100%&quot;, &quot;100%&quot;,...
+## $ host_acceptance_rate                         &lt;chr&gt; &quot;60%&quot;, &quot;99%&quot;, &quot;99%&quot;, &quot;...
+## $ host_is_superhost                            &lt;lgl&gt; TRUE, FALSE, FALSE, FA...
+## $ host_thumbnail_url                           &lt;chr&gt; &quot;https://a0.muscache.c...
+## $ host_picture_url                             &lt;chr&gt; &quot;https://a0.muscache.c...
+## $ host_neighbourhood                           &lt;chr&gt; &quot;Sheung Wan&quot;, &quot;Sheung ...
+## $ host_listings_count                          &lt;dbl&gt; 2, 12, 12, 12, 1, 12, ...
+## $ host_total_listings_count                    &lt;dbl&gt; 2, 12, 12, 12, 1, 12, ...
+## $ host_verifications                           &lt;chr&gt; &quot;[&#39;email&#39;, &#39;phone&#39;, &#39;r...
+## $ host_has_profile_pic                         &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE...
+## $ host_identity_verified                       &lt;lgl&gt; TRUE, FALSE, FALSE, FA...
+## $ street                                       &lt;chr&gt; &quot;Sheung Wan, Hong Kong...
+## $ neighbourhood                                &lt;chr&gt; &quot;Central &amp; Western Dis...
+## $ neighbourhood_cleansed                       &lt;chr&gt; &quot;Central &amp; Western&quot;, &quot;...
+## $ neighbourhood_group_cleansed                 &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ city                                         &lt;chr&gt; &quot;Sheung Wan&quot;, &quot;Sheung ...
+## $ state                                        &lt;chr&gt; NA, NA, NA, NA, &quot;Hong ...
+## $ zipcode                                      &lt;chr&gt; NA, NA, NA, NA, NA, NA...
+## $ market                                       &lt;chr&gt; &quot;Hong Kong&quot;, &quot;Hong Kon...
+## $ smart_location                               &lt;chr&gt; &quot;Sheung Wan, Hong Kong...
+## $ country_code                                 &lt;chr&gt; &quot;HK&quot;, &quot;HK&quot;, &quot;HK&quot;, &quot;HK&quot;...
+## $ country                                      &lt;chr&gt; &quot;Hong Kong&quot;, &quot;Hong Kon...
+## $ latitude                                     &lt;dbl&gt; 22.3, 22.3, 22.3, 22.3...
+## $ longitude                                    &lt;dbl&gt; 114, 114, 114, 114, 11...
+## $ is_location_exact                            &lt;lgl&gt; TRUE, TRUE, TRUE, FALS...
+## $ property_type                                &lt;chr&gt; &quot;Apartment&quot;, &quot;Apartmen...
+## $ room_type                                    &lt;chr&gt; &quot;Entire home/apt&quot;, &quot;En...
+## $ accommodates                                 &lt;dbl&gt; 3, 3, 6, 6, 2, 6, 6, 2...
+## $ bathrooms                                    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1...
+## $ bedrooms                                     &lt;dbl&gt; 1, 0, 2, 2, 1, 2, 2, 1...
+## $ beds                                         &lt;dbl&gt; 2, 2, 3, 3, 1, 3, 3, 1...
+## $ bed_type                                     &lt;chr&gt; &quot;Real Bed&quot;, &quot;Real Bed&quot;...
+## $ amenities                                    &lt;chr&gt; &quot;{\&quot;Cable TV\&quot;,Interne...
+## $ square_feet                                  &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ price                                        &lt;chr&gt; &quot;$1,395.00&quot;, &quot;$783.00&quot;...
+## $ weekly_price                                 &lt;chr&gt; NA, NA, NA, NA, NA, NA...
+## $ monthly_price                                &lt;chr&gt; &quot;$29,451.00&quot;, NA, NA, ...
+## $ security_deposit                             &lt;chr&gt; &quot;$2,325.00&quot;, &quot;$775.00&quot;...
+## $ cleaning_fee                                 &lt;chr&gt; &quot;$310.00&quot;, &quot;$271.00&quot;, ...
+## $ guests_included                              &lt;dbl&gt; 2, 2, 2, 3, 1, 2, 2, 1...
+## $ extra_people                                 &lt;chr&gt; &quot;$155.00&quot;, &quot;$155.00&quot;, ...
+## $ minimum_nights                               &lt;dbl&gt; 3, 14, 2, 2, 2, 2, 2, ...
+## $ maximum_nights                               &lt;dbl&gt; 365, 365, 365, 365, 60...
+## $ minimum_minimum_nights                       &lt;dbl&gt; 3, 14, 2, 2, 2, 2, 2, ...
+## $ maximum_minimum_nights                       &lt;dbl&gt; 4, 14, 2, 2, 2, 2, 2, ...
+## $ minimum_maximum_nights                       &lt;dbl&gt; 365, 365, 365, 365, 60...
+## $ maximum_maximum_nights                       &lt;dbl&gt; 365, 365, 365, 365, 60...
+## $ minimum_nights_avg_ntm                       &lt;dbl&gt; 3.1, 14.0, 2.0, 2.0, 2...
+## $ maximum_nights_avg_ntm                       &lt;dbl&gt; 365, 365, 365, 365, 60...
+## $ calendar_updated                             &lt;chr&gt; &quot;2 months ago&quot;, &quot;7 wee...
+## $ has_availability                             &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE...
+## $ availability_30                              &lt;dbl&gt; 0, 0, 0, 14, 0, 8, 9, ...
+## $ availability_60                              &lt;dbl&gt; 23, 0, 0, 44, 15, 33, ...
+## $ availability_90                              &lt;dbl&gt; 53, 14, 0, 74, 45, 63,...
+## $ availability_365                             &lt;dbl&gt; 143, 193, 0, 345, 135,...
+## $ calendar_last_scraped                        &lt;date&gt; 2020-06-17, 2020-06-1...
+## $ number_of_reviews                            &lt;dbl&gt; 134, 229, 271, 305, 27...
+## $ number_of_reviews_ltm                        &lt;dbl&gt; 4, 1, 13, 48, 0, 16, 1...
+## $ first_review                                 &lt;date&gt; 2011-02-14, 2011-03-0...
+## $ last_review                                  &lt;date&gt; 2020-03-24, 2020-04-1...
+## $ review_scores_rating                         &lt;dbl&gt; 97, 89, 89, 93, 97, 86...
+## $ review_scores_accuracy                       &lt;dbl&gt; 10, 8, 9, 10, 10, 9, 9...
+## $ review_scores_cleanliness                    &lt;dbl&gt; 9, 9, 9, 10, 9, 9, 9, ...
+## $ review_scores_checkin                        &lt;dbl&gt; 10, 9, 10, 10, 10, 9, ...
+## $ review_scores_communication                  &lt;dbl&gt; 10, 9, 10, 10, 10, 9, ...
+## $ review_scores_location                       &lt;dbl&gt; 10, 10, 10, 10, 10, 10...
+## $ review_scores_value                          &lt;dbl&gt; 9, 9, 9, 9, 10, 9, 9, ...
+## $ requires_license                             &lt;lgl&gt; FALSE, FALSE, FALSE, F...
+## $ license                                      &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ jurisdiction_names                           &lt;lgl&gt; NA, NA, NA, NA, NA, NA...
+## $ instant_bookable                             &lt;lgl&gt; FALSE, FALSE, FALSE, F...
+## $ is_business_travel_ready                     &lt;lgl&gt; FALSE, FALSE, FALSE, F...
+## $ cancellation_policy                          &lt;chr&gt; &quot;strict_14_with_grace_...
+## $ require_guest_profile_picture                &lt;lgl&gt; FALSE, FALSE, FALSE, F...
+## $ require_guest_phone_verification             &lt;lgl&gt; FALSE, FALSE, FALSE, F...
+## $ calculated_host_listings_count               &lt;dbl&gt; 1, 13, 13, 13, 1, 13, ...
+## $ calculated_host_listings_count_entire_homes  &lt;dbl&gt; 1, 9, 9, 9, 1, 9, 9, 0...
+## $ calculated_host_listings_count_private_rooms &lt;dbl&gt; 0, 4, 4, 4, 0, 4, 4, 1...
+## $ calculated_host_listings_count_shared_rooms  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0...
+## $ reviews_per_month                            &lt;dbl&gt; 1.18, 2.02, 2.47, 2.81...</code></pre>
+<pre class="r"><code>hk_listings_clean &lt;- hk_listings %&gt;% 
+  subset(select = c(listing_url, host_id, host_response_time, host_response_rate, host_acceptance_rate, host_is_superhost, host_total_listings_count, neighbourhood_cleansed, latitude, longitude, property_type, room_type, is_location_exact, accommodates, bedrooms, bathrooms, beds, price, cleaning_fee, guests_included, extra_people, minimum_nights, maximum_nights, review_scores_rating, number_of_reviews, is_business_travel_ready, instant_bookable, cancellation_policy))</code></pre>
+<p>By glimpsing the new dataset we can straight away see some of the issues that need to be addressed such as a large number of <code>missing values</code> (N/As) as well as a few variables where observations are of <code>character</code> type but should be of <code>numeric</code> types. This includes important variables such as ‘cleaning fee’, ‘extra people’ and ‘price’.</p>
+<p>In addition, there are some variables that are <code>categorical</code>, such as for example: ‘minimum or maximum nights’ which are numeric variables or ‘room or property type’ which are character variables. There are also binary variables such as ‘instant bookable’ and ‘business travel ready’. The full list is as follows:</p>
+<p>Categorical:</p>
+<ul>
+<li>Host response time (character)</li>
+<li>Host response rate (numeric)</li>
+<li>Host acceptance rate (numeric)</li>
+<li>Host is super host (binary)</li>
+<li>Neighborhood cleansed (character)</li>
+<li>Latitude (numeric)</li>
+<li>Longitude (numeric)</li>
+<li>Property type (character)</li>
+<li>Room type (character)</li>
+<li>Is location exact (binary)</li>
+<li>Minimum/Maximum nights (numeric)</li>
+<li>Review score rating (numeric)</li>
+<li>Is business travel ready (binary)</li>
+<li>Instant bookable (binary)</li>
+</ul>
+<p>We can see that most variables in the short-listed dataset are <code>categorical</code> i.e. can take one of a limited number of observations. Some of these are <code>numeric</code>, some are <code>character</code> and some are <code>binary</code> (can either be TRUE or FALSE)</p>
+<div id="cleaning-the-data" class="section level2">
+<h2>Cleaning the data:</h2>
+<pre class="r"><code>ggplot(hk_listings_clean, aes(x = minimum_nights)) + #Check for the most common values in minimum_nights
+  geom_density() +
+  xlim(0, 40) +
+  labs(y = &quot;Density&quot;,
+       x = &quot;Minimum Nights&quot;,
+       title = &quot;Most common value for &#39;minimum nights&#39; is under 4&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-5-1.png" width="800" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>skim(hk_listings_clean$cleaning_fee) #Checking for the number of N/As in &#39;cleaning fee&#39;</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">hk_listings_clean$cleanin…</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">11187</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">data</td>
+<td align="right">5055</td>
+<td align="right">0.55</td>
+<td align="right">5</td>
+<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">259</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>hk_listings_clean &lt;- hk_listings_clean %&gt;%
+  mutate(cleaning_fee = parse_number(cleaning_fee), #Changing the type of data from character to numeric
+         extra_people = parse_number(extra_people),
+         price = parse_number(price),
+         host_response_rate = parse_number(host_response_rate),
+         host_acceptance_rate = parse_number(host_acceptance_rate)) %&gt;% 
+  mutate(cleaning_fee = case_when( #Changing N/As in the cleaning_fee to 97 (average cleaning fee =&gt; Expected cleaning fee?)
+    is.na(cleaning_fee) ~ 97, 
+    TRUE ~ cleaning_fee)) %&gt;% 
+  filter(minimum_nights &lt;= 4 &amp; #filter for minimum stay of under 4 and maximum under 30 to filter for accommodation used for travel purposes only
+         !is.na(bedrooms) &amp;
+         !is.na(bathrooms) &amp; #There are missing values in `bedrooms`, `bathrooms`, `beds`. As rooms with no bedrooms/bathrooms/beds would have a corresponding value of 0, we should drop these NAs.
+         !is.na(beds) &amp;
+         !is.na(review_scores_rating) &amp;
+         price != 0) #&#39;review_scores_rating&#39; also has N/As, these will have corresponding value of 0.
+    
+hk_listings_clean &lt;- hk_listings_clean %&gt;%
+  filter(!is.na(host_response_rate) &amp;
+         !is.na(host_acceptance_rate)) #filter out N/As in the &#39;host response rate&#39; and &#39;host acceptance rate&#39;
+
+glimpse(hk_listings_clean)</code></pre>
+<pre><code>## Rows: 3,313
+## Columns: 28
+## $ listing_url               &lt;chr&gt; &quot;https://www.airbnb.com/rooms/69074&quot;, &quot;ht...
+## $ host_id                   &lt;dbl&gt; 160139, 304876, 304876, 304876, 304876, 1...
+## $ host_response_time        &lt;chr&gt; &quot;within a few hours&quot;, &quot;within an hour&quot;, &quot;...
+## $ host_response_rate        &lt;dbl&gt; 86, 100, 100, 100, 100, 100, 100, 84, 84,...
+## $ host_acceptance_rate      &lt;dbl&gt; 60, 99, 99, 99, 99, 74, 88, 96, 96, 100, ...
+## $ host_is_superhost         &lt;lgl&gt; TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, F...
+## $ host_total_listings_count &lt;dbl&gt; 2, 12, 12, 12, 12, 1, 1, 8, 8, 18, 18, 18...
+## $ neighbourhood_cleansed    &lt;chr&gt; &quot;Central &amp; Western&quot;, &quot;Central &amp; Western&quot;,...
+## $ latitude                  &lt;dbl&gt; 22.3, 22.3, 22.3, 22.3, 22.3, 22.3, 22.3,...
+## $ longitude                 &lt;dbl&gt; 114, 114, 114, 114, 114, 114, 114, 114, 1...
+## $ property_type             &lt;chr&gt; &quot;Apartment&quot;, &quot;Apartment&quot;, &quot;Apartment&quot;, &quot;A...
+## $ room_type                 &lt;chr&gt; &quot;Entire home/apt&quot;, &quot;Entire home/apt&quot;, &quot;En...
+## $ is_location_exact         &lt;lgl&gt; TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE...
+## $ accommodates              &lt;dbl&gt; 3, 6, 6, 6, 6, 2, 4, 4, 6, 3, 10, 3, 5, 2...
+## $ bedrooms                  &lt;dbl&gt; 1, 2, 2, 2, 2, 1, 2, 1, 3, 1, 3, 1, 1, 1,...
+## $ bathrooms                 &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 3, 1, 1, 1,...
+## $ beds                      &lt;dbl&gt; 2, 3, 3, 3, 3, 1, 3, 1, 3, 1, 6, 2, 3, 1,...
+## $ price                     &lt;dbl&gt; 1395, 845, 1046, 690, 767, 643, 1070, 891...
+## $ cleaning_fee              &lt;dbl&gt; 310, 271, 302, 302, 302, 97, 504, 310, 38...
+## $ guests_included           &lt;dbl&gt; 2, 2, 3, 2, 2, 1, 4, 2, 2, 1, 3, 1, 2, 1,...
+## $ extra_people              &lt;dbl&gt; 155, 194, 225, 194, 194, 0, 0, 155, 155, ...
+## $ minimum_nights            &lt;dbl&gt; 3, 2, 2, 2, 2, 1, 4, 2, 4, 1, 1, 1, 1, 1,...
+## $ maximum_nights            &lt;dbl&gt; 365, 365, 365, 365, 365, 60, 1125, 365, 3...
+## $ review_scores_rating      &lt;dbl&gt; 97, 89, 93, 86, 86, 98, 95, 93, 97, 86, 9...
+## $ number_of_reviews         &lt;dbl&gt; 134, 271, 305, 222, 225, 163, 240, 43, 16...
+## $ is_business_travel_ready  &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...
+## $ instant_bookable          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...
+## $ cancellation_policy       &lt;chr&gt; &quot;strict_14_with_grace_period&quot;, &quot;strict_14...</code></pre>
+<p>Here, we first changed some of the variable types to <code>numeric</code>. This includes variables such as ‘price’, ‘extra people’ and ‘cleaning fee’ which were previously character types.</p>
+<p>After skimming the cleaning_fee variable, we see that there are <code>5055</code> missing values. We look at why there could be missing values for the ‘cleaning fee’. The reason could be that cleaning services were never used for the property and hence a price could not be stated. However, this does not mean that cleaning fee is 0. We therefore, decided to change all the missing values for the cleaning fee to <code>$97</code> which is the average of the observations for ‘cleaning fee’. Hence, this could be thought of as the expected cleaning fee.</p>
+<p>Next, if we look at the density plot for ‘minimum nights’, it is clear that the observations are concentrated <code>under 4</code>, there is a also a lot of observations <code>around 29</code>. Since we want to analyse the property prices for <code>travel purposes only</code>, it makes sense to only include the observations that are below 4. This is because that way we capture most of the observations and also exclude observations concentrated around 29, which are clearly intended for non-travel purposes and would hence, not be applicable to our analysis. The values of around 29 could be explained by the hosts attempting to rent-out the property through Airbnb as the minimum stay is 1 month. This could apply to students staying for term-time or people living in the city for a prolonged period of time i.e. 1 month to a year.</p>
+<p>As a final step in cleaning the data, we remove the <code>missing values</code> from variables such as number of beds/bedrooms/bathrooms, these <code>N/As</code> would have a corresponding value of 0, and could thus be useful for the analysis. In addition, we exclude the properties with values of $0, as these observations could be mistakes and could impact our regression analysis.</p>
+<div id="solve-outliers" class="section level3">
+<h3>Solve outliers:</h3>
+<p>There are 33 types of <code>property_type</code> in the data set. To take a closer look, we use a bar chart to show the number of listings in each <code>property_type</code>.</p>
+<pre class="r"><code>property &lt;- hk_listings_clean %&gt;% 
+  group_by(property_type) %&gt;% 
+  count() %&gt;% 
+  arrange(desc(n))
+
+ggplot(property, aes(y = reorder(property_type, n), x = n)) +
+  geom_col() +
+  labs(y = &quot;&quot;,
+       x = &quot;Count&quot;,
+       title = &quot;Count of property types&quot;) +
+  theme_minimal()</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-7-1.png" width="800" style="display: block; margin: auto;" /></p>
+<p>We can see from the above graph that most property type is a <code>categorical</code> variables and the most common property types are <code>Apartment</code>, <code>Condo</code>, <code>Serviced Apartment</code>, <code>Hostel</code> and <code>Guesthouse</code>. The top 5 types make up 82% of total listings. Therefore, we simplify the <code>property_type</code> to have top 5 types and others to <code>prop_type_simplified</code>.</p>
+<pre class="r"><code>hk_listings_clean &lt;- hk_listings_clean %&gt;%
+  mutate(prop_type_simplified = case_when(
+    property_type %in% c(&quot;Apartment&quot;,&quot;Condominium&quot;, &quot;Serviced apartment&quot;, &quot;Hostel&quot;, &quot;Guesthouse&quot;) ~ property_type, 
+    TRUE ~ &quot;Other&quot;))
+
+glimpse(hk_listings_clean)</code></pre>
+<pre><code>## Rows: 3,313
+## Columns: 29
+## $ listing_url               &lt;chr&gt; &quot;https://www.airbnb.com/rooms/69074&quot;, &quot;ht...
+## $ host_id                   &lt;dbl&gt; 160139, 304876, 304876, 304876, 304876, 1...
+## $ host_response_time        &lt;chr&gt; &quot;within a few hours&quot;, &quot;within an hour&quot;, &quot;...
+## $ host_response_rate        &lt;dbl&gt; 86, 100, 100, 100, 100, 100, 100, 84, 84,...
+## $ host_acceptance_rate      &lt;dbl&gt; 60, 99, 99, 99, 99, 74, 88, 96, 96, 100, ...
+## $ host_is_superhost         &lt;lgl&gt; TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, F...
+## $ host_total_listings_count &lt;dbl&gt; 2, 12, 12, 12, 12, 1, 1, 8, 8, 18, 18, 18...
+## $ neighbourhood_cleansed    &lt;chr&gt; &quot;Central &amp; Western&quot;, &quot;Central &amp; Western&quot;,...
+## $ latitude                  &lt;dbl&gt; 22.3, 22.3, 22.3, 22.3, 22.3, 22.3, 22.3,...
+## $ longitude                 &lt;dbl&gt; 114, 114, 114, 114, 114, 114, 114, 114, 1...
+## $ property_type             &lt;chr&gt; &quot;Apartment&quot;, &quot;Apartment&quot;, &quot;Apartment&quot;, &quot;A...
+## $ room_type                 &lt;chr&gt; &quot;Entire home/apt&quot;, &quot;Entire home/apt&quot;, &quot;En...
+## $ is_location_exact         &lt;lgl&gt; TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE...
+## $ accommodates              &lt;dbl&gt; 3, 6, 6, 6, 6, 2, 4, 4, 6, 3, 10, 3, 5, 2...
+## $ bedrooms                  &lt;dbl&gt; 1, 2, 2, 2, 2, 1, 2, 1, 3, 1, 3, 1, 1, 1,...
+## $ bathrooms                 &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 3, 1, 1, 1,...
+## $ beds                      &lt;dbl&gt; 2, 3, 3, 3, 3, 1, 3, 1, 3, 1, 6, 2, 3, 1,...
+## $ price                     &lt;dbl&gt; 1395, 845, 1046, 690, 767, 643, 1070, 891...
+## $ cleaning_fee              &lt;dbl&gt; 310, 271, 302, 302, 302, 97, 504, 310, 38...
+## $ guests_included           &lt;dbl&gt; 2, 2, 3, 2, 2, 1, 4, 2, 2, 1, 3, 1, 2, 1,...
+## $ extra_people              &lt;dbl&gt; 155, 194, 225, 194, 194, 0, 0, 155, 155, ...
+## $ minimum_nights            &lt;dbl&gt; 3, 2, 2, 2, 2, 1, 4, 2, 4, 1, 1, 1, 1, 1,...
+## $ maximum_nights            &lt;dbl&gt; 365, 365, 365, 365, 365, 60, 1125, 365, 3...
+## $ review_scores_rating      &lt;dbl&gt; 97, 89, 93, 86, 86, 98, 95, 93, 97, 86, 9...
+## $ number_of_reviews         &lt;dbl&gt; 134, 271, 305, 222, 225, 163, 240, 43, 16...
+## $ is_business_travel_ready  &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...
+## $ instant_bookable          &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,...
+## $ cancellation_policy       &lt;chr&gt; &quot;strict_14_with_grace_period&quot;, &quot;strict_14...
+## $ prop_type_simplified      &lt;chr&gt; &quot;Apartment&quot;, &quot;Apartment&quot;, &quot;Apartment&quot;, &quot;A...</code></pre>
+</div>
+<div id="create-the-simplified-neighbourhood" class="section level3">
+<h3>Create the simplified neighbourhood</h3>
+<pre class="r"><code>hk_listings_clean &lt;- hk_listings_clean %&gt;%
+  mutate(neighbourhood_simplified = case_when(
+    neighbourhood_cleansed == &quot;Sham Shui Po&quot; |
+      neighbourhood_cleansed == &quot;Yau Tsim Mong&quot; |
+      neighbourhood_cleansed == &quot;Kowloon City&quot; |
+      neighbourhood_cleansed == &quot;Wong Tai Sin&quot; |
+      neighbourhood_cleansed == &quot;Kwun Tong&quot;  ~ &quot;Kowloon&quot;,
+    neighbourhood_cleansed == &quot;Central &amp; Western&quot; |
+      neighbourhood_cleansed == &quot;Eastern&quot; |
+      neighbourhood_cleansed == &quot;Southern&quot;|
+      neighbourhood_cleansed == &quot;Wan Chai&quot;~ &quot;Hong Kong Island&quot;,
+    TRUE ~ &quot;New Territories&quot;
+  ))</code></pre>
+</div>
+</div>
+<div id="exploring-the-data" class="section level2">
+<h2>Exploring the data:</h2>
+<div id="the-price" class="section level3">
+<h3>The Price</h3>
+<p>Booking a room on Airbnb, we have three kind of charges to consider: <code>price</code> for room price, <code>extra_people</code> for extra people charge, <code>cleaning_fee</code> for cleaning charges. From the density graphs below, we can see that the prices are extremely right skewed, which makes senses as rooms in the city centre could be unbelievably expensive. The log price distribution would look closer to a normal distribution, which will be shown in the Regression analysis for the price of 4-night stay.</p>
+<pre class="r"><code>hk_listings_clean %&gt;%
+  select(`Room price` = price, `Extra people charge` = extra_people, `Cleaning fee` = cleaning_fee) %&gt;% 
+  pivot_longer(cols = 1:3, names_to = &quot;charge_type&quot;, values_to = &quot;value&quot;) %&gt;% 
+  ggplot(aes(value)) +
+  geom_density() +
+  facet_wrap(~charge_type, scales = &quot;free&quot;) +
+  labs(x = &quot;$ Price&quot;,
+       y = &quot;&quot;,
+       title = &quot;Prices are extremely right skewed&quot;,
+       subtitle = &quot;Distributions of prices and charges&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-10-1.png" width="800" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hk_listings_clean %&gt;%
+  select(`Room price` = price, `Extra people charge` = extra_people, `Cleaning fee` = cleaning_fee) %&gt;% 
+  pivot_longer(cols = 1:3, names_to = &quot;charge_type&quot;, values_to = &quot;value&quot;) %&gt;% 
+  mutate(value_log = log(value)) %&gt;% 
+  filter(is.finite(value_log)) %&gt;% 
+  ggplot(aes(value_log)) +
+  geom_density() +
+  facet_wrap(~charge_type, scales = &quot;free&quot;) +
+  labs(x = &quot;Log Price&quot;,
+       y = &quot;&quot;, 
+       title = &quot;Log prices are closer to normal distribtuions&quot;,
+       subtitle = &quot;Distributions of log prices and log charges&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-10-2.png" width="800" style="display: block; margin: auto;" /></p>
+</div>
+<div id="the-location" class="section level3">
+<h3>The location</h3>
+<p>Locations are important. According to the graphs below, Kowloon has the most number of rooms but has the cheapest room price. On the other hand, rooms in Hong Kong island is the most expensive.</p>
+<pre class="r"><code>hk_listings_clean %&gt;% 
+  select(location = neighbourhood_simplified) %&gt;% 
+  ggplot(aes(x =location, fill = location)) +
+  geom_bar(alpha=0.5) +
+  labs(x = &quot;&quot;,
+       y = &quot;&quot;,
+       title = &quot;Kowloon has the most number of rooms&quot;,
+       subtitle = &quot;The number of Airbnb rooms on the three islands&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw() +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-11-1.png" width="800" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hk_listings_clean %&gt;% 
+  select(Location = neighbourhood_simplified, price) %&gt;% 
+  ggplot(aes(x = price, fill = Location)) +
+  geom_density(alpha=0.2) +
+  scale_x_log10() +
+  labs(x = &quot;Log room price&quot;,
+       y = &quot;&quot;,
+       title = &quot;Rooms in Hong Kong island are the most expensive&quot;,
+       subtitle = &quot;Distribution of log room price on the three islands&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw() +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-11-2.png" width="800" style="display: block; margin: auto;" /></p>
+</div>
+<div id="the-host" class="section level3">
+<h3>The host</h3>
+<p>In Hong Kong, 24% of the hosts are <code>super hosts</code>. Most hosts respond and accept actively, and have less than 50 listings on Airbnb.</p>
+<pre class="r"><code>hk_listings_clean %&gt;%
+  select(host_is_superhost) %&gt;% 
+  mutate(`Super host` = ifelse(host_is_superhost, &quot;Super host&quot;, &quot;Non-super host&quot;)) %&gt;% 
+  ggplot(aes(x = `Super host`, fill = `Super host`)) +
+  geom_bar() +
+  labs(x = &quot;&quot;,
+       y = &quot;&quot;,
+       title = &quot;Most hosts respond within an hour&quot;,
+       subtitle = &quot;Distributions of respond time&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw() +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-12-1.png" width="800" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hk_listings_clean %&gt;%
+  select(`Response rate` = host_response_rate, `Acceptance rate` = host_acceptance_rate, `Total listings` = host_total_listings_count, host_is_superhost) %&gt;%
+  mutate(`Super host` = ifelse(host_is_superhost, &quot;Super host&quot;, &quot;Non-super host&quot;)) %&gt;% 
+  pivot_longer(cols = 1:3, names_to = &quot;host_data&quot;, values_to = &quot;value&quot;) %&gt;% 
+  ggplot(aes(x = value, fill = `Super host`)) +
+  geom_histogram() +
+  facet_wrap(~host_data, scales = &quot;free&quot;) +
+  labs(x = &quot;&quot;,
+       y = &quot;&quot;,
+       title = &quot;Most hosts respond actively, and have listings lower than 50&quot;,
+       subtitle = &quot;Distributions of acceptance rate, response rate and total number of listings&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw() + 
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-12-2.png" width="800" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hk_listings_clean %&gt;%
+  select(host_response_time, host_is_superhost) %&gt;% 
+  mutate(`Super host` = ifelse(host_is_superhost, &quot;Super host&quot;, &quot;Non-super host&quot;)) %&gt;% 
+  ggplot(aes(x = host_response_time, fill = `Super host`)) +
+  geom_bar() +
+  labs(x = &quot;&quot;,
+       y = &quot;&quot;,
+       title = &quot;Most hosts respond within an hour&quot;,
+       subtitle = &quot;Distributions of respond time&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw() +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-12-3.png" width="800" style="display: block; margin: auto;" /></p>
+</div>
+<div id="the-room" class="section level3">
+<h3>The room</h3>
+<p>We expect that the number of <code>accommodates, bathrooms, bedrooms, beds</code> will have an impact on the price of the property, so we can plot a graph to check:</p>
+<pre class="r"><code>hk_listings_clean %&gt;%
+  select(accommodates, bathrooms, bedrooms, beds, price) %&gt;% 
+  pivot_longer(cols = 1:4, names_to = &quot;room_data&quot;, values_to = &quot;value&quot;) %&gt;% 
+  ggplot(aes(x = value, y = price)) +
+  geom_point(size = 1) +
+  geom_smooth(method = &quot;lm&quot;, color=&quot;orange&quot;) +
+  facet_wrap(~room_data, scales = &quot;free&quot;, ncol = 2) +
+  ylim(0, 2000) + #set limit at $2000 to exclude outliers on the graph
+  labs(x = &quot;&quot;,
+       y = &quot;&quot;,
+       title = &quot;The number of accommodates, bathrooms, bedrooms and beds \n is positively correlated with price&quot;,
+       subtitle = &quot;&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-13-1.png" width="800" style="display: block; margin: auto;" /></p>
+<p>We also think the <code>type of room and property</code> will have an impact on the price, so we can plot a graph to check:</p>
+<pre class="r"><code>hk_listings_clean %&gt;% 
+  select(room_type, price) %&gt;% 
+  ggplot(aes(x = price, fill = reorder(room_type, desc(price)))) +
+  geom_density(alpha=0.2) +
+  scale_x_log10() +
+  labs(x = &quot;Log price&quot;,
+       y = &quot;&quot;,
+       title = &quot;Entire homes are the most expensive on average, while shared rooms are the cheapest&quot;,
+       subtitle = &quot;Distribution of log room price for different room types&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw() +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-14-1.png" width="800" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hk_listings_clean %&gt;% 
+  select(property_type, price) %&gt;% 
+  ggplot(aes(x = price, fill = factor(property_type, levels = c(&quot;Apartment&quot;,&quot;Condominium&quot;, &quot;Serviced apartment&quot;,&quot;Hostel&quot;, &quot;Guesthouse&quot;, &quot;Other&quot;)))) +
+  geom_density(alpha=0.2) +
+  scale_x_log10() +
+  labs(x = &quot;Log price&quot;,
+       y = &quot;&quot;,
+       title = &quot;Apartments and houses are more likely to be expensive&quot;,
+       subtitle = &quot;Distribution of log room price for different property types&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw() +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-14-2.png" width="800" style="display: block; margin: auto;" /></p>
+</div>
+<div id="the-ratings" class="section level3">
+<h3>The ratings</h3>
+<p>Another factor that could have an impact on the price is the <code>review rating</code> and <code>the number of ratings</code>:</p>
+<pre class="r"><code>hk_listings_clean %&gt;%
+  select(`Review rating` = review_scores_rating, `Review number` =number_of_reviews, price) %&gt;% 
+  pivot_longer(cols = 1:2, names_to = &quot;review_data&quot;, values_to = &quot;value&quot;) %&gt;% 
+  ggplot(aes(x = value, y = price)) +
+  geom_point(size = 1) +
+  geom_smooth(method = &quot;lm&quot;, color=&quot;orange&quot;) +
+  facet_wrap(~review_data, scales = &quot;free&quot;, ncol = 2) +
+  labs(x = &quot;&quot;,
+       y = &quot;$ Price&quot;,
+       title = &quot;Reviews have no obvious relationship with room price&quot;,
+       subtitle = &quot;&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-15-1.png" width="800" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>corr_rat &lt;- cor(hk_listings_clean$review_scores_rating, hk_listings_clean$price) #Checking the correlation between the 2 variables
+
+paste0(&quot;The correlation between rating and price is &quot;, round(corr_rat,2))</code></pre>
+<pre><code>## [1] &quot;The correlation between rating and price is 0.07&quot;</code></pre>
+<p>Here, we can see that there is <code>no correlation</code> between the <code>review rating</code> and the <code>price</code> of the property. This is indicated by scatter plot where no clear relationship can be seen and is further supported by the correlation output of <code>0.06</code> (almost 0).</p>
+</div>
+<div id="the-policy" class="section level3">
+<h3>The policy</h3>
+<p><code>Booking and canceling policies</code> could also have an impact on the price:</p>
+<pre class="r"><code># We reclassify `super_strict_30` and `super_strict_60` into `super strict`, to simplify analysis. 
+
+hk_listings_clean %&gt;%
+  select(cancellation_policy, price) %&gt;% 
+  mutate(cancel = case_when(
+    cancellation_policy == &#39;strict_14_with_grace_period&#39; ~ &#39;Strict&#39;,
+    cancellation_policy == &#39;moderate&#39; ~ &#39;Moderate&#39;, 
+    cancellation_policy == &#39;flexible&#39; ~ &#39;Flexible&#39;,
+    TRUE ~ &#39;Super strict&#39;
+  )) %&gt;% 
+  group_by(cancel) %&gt;% 
+  summarise(mean = mean(price)) %&gt;% 
+  ggplot(aes(x = mean, y = cancel)) +
+  geom_col(size = 1) +
+  labs(x = &quot;Mean price&quot;,
+       y = &quot;&quot;,
+       title = &quot;Cancellation policy has an impact on price, but probably in a nonlinear way&quot;,
+       subtitle = &quot;Mean price for different cancellation policies&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-16-1.png" width="800" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hk_listings_clean %&gt;%
+  select(instant_bookable, price) %&gt;% 
+  mutate(book = ifelse(instant_bookable, &quot;Instant book&quot;, &quot;Non-instant book&quot;)) %&gt;% 
+  group_by(book) %&gt;% 
+  summarise(mean = mean(price)) %&gt;% 
+  ggplot(aes(x = mean, y = book)) +
+  geom_col(size = 1) +
+  labs(x = &quot;Mean price&quot;,
+       y = &quot;&quot;,
+       title = &quot;Non-instant book rooms are more expensive&quot;,
+       subtitle = &quot;Mean price for different booking policies&quot;,
+       caption = &quot;Source: Airbnb&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/portfolio/project-4_files/figure-html/unnamed-chunk-16-2.png" width="800" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>

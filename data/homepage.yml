@@ -5,7 +5,7 @@ banner:
 # about
 about:
   enable : true
-  content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+  content : "My name is Xuan Zhang, and I come from China. I did my undergrad at Sun Yat-sen University studying a major of financial management. I chose to study at LBS to explore a different culture and different possibilities of life."
   button:
     enable : true
     label : "know more"
@@ -102,7 +102,7 @@ portfolio:
 
 # testimonial
 testimonial:
-  enable : true
+  enable : false
   title : "Testimonials"
   item:
     - name : "Jesica Gomez"

@@ -6,23 +6,32 @@
     <description>Recent content in Portfolio on Olivia&#39;s</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 12 May 2019 12:14:34 +0600</lastBuildDate><atom:link href="/portfolio/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 11 Oct 2020 12:14:34 +0600</lastBuildDate><atom:link href="/portfolio/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Artwork Design</title>
-      <link>/portfolio/project-2/</link>
-      <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
+      <title>Yield Curve inversion</title>
+      <link>/portfolio/project-3/</link>
+      <pubDate>Sun, 11 Oct 2020 12:14:34 +0600</pubDate>
       
-      <guid>/portfolio/project-2/</guid>
-      <description>Project RequirementsLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua.</description>
+      <guid>/portfolio/project-3/</guid>
+      <description>Every so often, we hear warnings from commentators on the “inverted yield curve” and its predictive power with respect to recessions.</description>
     </item>
     
     <item>
-      <title>Artwork Design</title>
-      <link>/portfolio/project-3/</link>
-      <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
+      <title>Where Do People Drink The Most Beer, Wine And Spirits?</title>
+      <link>/portfolio/project-1/</link>
+      <pubDate>Sat, 26 Sep 2020 12:14:34 +0600</pubDate>
       
-      <guid>/portfolio/project-3/</guid>
-      <description>Project RequirementsLorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua.</description>
+      <guid>/portfolio/project-1/</guid>
+      <description>Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries.</description>
+    </item>
+    
+    <item>
+      <title>Life expectancy, population, and GDP per capita</title>
+      <link>/portfolio/project-2/</link>
+      <pubDate>Sun, 13 Sep 2020 12:14:34 +0600</pubDate>
+      
+      <guid>/portfolio/project-2/</guid>
+      <description>The gapminder dataset that has data on life expectancy, population, and GDP per capita for 142 countries from 1952 to 2007.</description>
     </item>
     
     <item>
@@ -77,15 +86,6 @@
       
       <guid>/portfolio/project-9/</guid>
       <description>Project Requirements Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
-    </item>
-    
-    <item>
-      <title>Where Do People Drink The Most Beer, Wine And Spirits?</title>
-      <link>/portfolio/project-1/</link>
-      <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
-      
-      <guid>/portfolio/project-1/</guid>
-      <description>Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries.</description>
     </item>
     
   </channel>

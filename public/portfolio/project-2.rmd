@@ -1,31 +1,96 @@
 ---
 categories:
-- branding
-client: John Doe
-date: "2019-05-12T12:14:34+06:00"
+- data analytics
+author: Olivia Zhang
+date: "2020-09-13T12:14:34+06:00"
 description: This is meta description.
 draft: false
-image: images/portfolio/item-2.png
-project_url: https://themefisher.com/
-title: Artwork Design
+image: images/portfolio/life.jpg
+title: Life expectancy, population, and GDP per capita 
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    number_sections: yes
+    toc: yes
+    toc_float: yes
+    code_folding: show
 ---
 
-#### Project Requirements
+```{r load-libraries, warning=FALSE, message=FALSE, echo=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(gapminder)  # gapminder dataset
+library(here)
+```
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-mollit anim id est laborum.
+The `gapminder` dataset that has data on life expectancy, population, and GDP per capita for 142 countries from 1952 to 2007. To get a glipmse of the dataframe, namely to see the variable names, variable types, etc., we use the `glimpse` function. We also want to have a look at the first 20 rows of data.
+
+```{r}
+glimpse(gapminder)
+
+head(gapminder, 20) # look at the first 20 rows of the dataframe
+
+```
+
+Our task is to produce two graphs of how life expectancy has changed over the years for China. 
+
+We have created the `country_data` and `continent_data` with the code below. 
+
+```{r}
+country_data <- gapminder %>% 
+            filter(country == "China")
+
+continent_data <- gapminder %>% 
+            filter(continent == "Asia")
+```
+
+First, create a plot of life expectancy over time for China. We should use  `geom_point()` to see the actual data points and `geom_smooth(se = FALSE)`  to plot the underlying trendlines.
+
+```{r, lifeExp_one_country}
+ plot1 <- ggplot(data = country_data, mapping = aes(x = year, y = lifeExp))+
+   geom_point() +
+   geom_smooth(se = FALSE)+
+   NULL 
+
+ plot1
+```
+
+Next we need to add a title. Create a new plot, or extend plot1, using the `labs()` function to add an informative title to the plot.
+
+```{r, lifeExp_one_country_with_label}
+ plot1<- ggplot(data = country_data, mapping = aes(x = year, y = lifeExp))+
+   geom_point() +
+   geom_smooth(se = FALSE) +
+   labs(title = "Life Expectancy of China from 1952 to 2007",
+       x = "Year",
+       y = "Life Expectancy") +
+   NULL
 
 
-#### Project Details
+ print(plot1)
+```
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae
-dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est.
+
+Secondly, produce a plot for all countries in Asia. 
+
+```{r lifeExp_one_continent}
+ ggplot(data = continent_data, mapping = aes(x =  year, y = lifeExp , colour= country))+
+   geom_point() + 
+   geom_smooth(se = FALSE) +
+   NULL
+```
+
+Finally, using the original `gapminder` data, produce a life expectancy over time graph, grouped (or faceted) by continent. We will remove all legends, adding the `theme(legend.position="none")` in the end of our ggplot.
+
+```{r lifeExp_facet_by_continent}
+ ggplot(data = gapminder , mapping = aes(x = year , y = lifeExp , colour= country))+
+   geom_point() + 
+   geom_smooth(se = FALSE) +
+   facet_wrap(~continent) +
+   theme(legend.position="none") + #remove all legends
+   NULL
+```
+
+> Analysis  
+
+We generally can see an upward trend regarding life expectancy in all continents. However, several African countries suffered from a decrease since 1985, possibly due to unstable political environments and social unrest. There are two obvious outliers, an African country in 1992 and an Asia country in 1976, both of which had a sudden drop in the expected age, which I think can be caused by wars. European and Oceanian had high levels of life expectancy back in 1952, and they continued to live longer thanks to the improvement of technology (I guess).  

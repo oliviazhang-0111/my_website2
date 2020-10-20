@@ -1,6 +1,7 @@
 ---
 categories:
 - data analytics
+- individual project
 author: Olivia Zhang
 date: "2020-09-13T12:14:34+06:00"
 description: This is meta description.

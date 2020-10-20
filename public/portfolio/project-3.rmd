@@ -1,6 +1,7 @@
 ---
 categories:
 - data analytics
+- finance
 - group project
 author: Olivia Zhang
 date: "2020-10-11T12:14:34+06:00"

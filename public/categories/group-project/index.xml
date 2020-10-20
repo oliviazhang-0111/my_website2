@@ -6,7 +6,16 @@
     <description>Recent content in group project on Olivia&#39;s</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Oct 2020 12:14:34 +0600</lastBuildDate><atom:link href="/categories/group-project/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 19 Oct 2020 12:14:34 +0600</lastBuildDate><atom:link href="/categories/group-project/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Airbnb in Hong Kong - EDA</title>
+      <link>/portfolio/project-4/</link>
+      <pubDate>Mon, 19 Oct 2020 12:14:34 +0600</pubDate>
+      
+      <guid>/portfolio/project-4/</guid>
+      <description>Exploratory Data Analysis (EDA)hk_listings &amp;lt;- vroom(&amp;quot;http://data.insideairbnb.com/china/hk/hong-kong/2020-06-15/data/listings.csv.gz&amp;quot;)At first glance, there are 11187 observations of 106 variables in the data set.</description>
+    </item>
+    
     <item>
       <title>Yield Curve inversion</title>
       <link>/portfolio/project-3/</link>

@@ -19,9 +19,27 @@
     <item>
       <title>group project</title>
       <link>/categories/group-project/</link>
-      <pubDate>Sun, 11 Oct 2020 12:14:34 +0600</pubDate>
+      <pubDate>Mon, 19 Oct 2020 12:14:34 +0600</pubDate>
       
       <guid>/categories/group-project/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>finance</title>
+      <link>/categories/finance/</link>
+      <pubDate>Sun, 11 Oct 2020 12:14:34 +0600</pubDate>
+      
+      <guid>/categories/finance/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>individual project</title>
+      <link>/categories/individual-project/</link>
+      <pubDate>Sun, 13 Sep 2020 12:14:34 +0600</pubDate>
+      
+      <guid>/categories/individual-project/</guid>
       <description></description>
     </item>
     
@@ -40,24 +58,6 @@
       <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
       
       <guid>/categories/design/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>development</title>
-      <link>/categories/development/</link>
-      <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
-      
-      <guid>/categories/development/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>illustration</title>
-      <link>/categories/illustration/</link>
-      <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
-      
-      <guid>/categories/illustration/</guid>
       <description></description>
     </item>
     

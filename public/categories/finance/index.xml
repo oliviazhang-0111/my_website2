@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>finance on Olivia&#39;s</title>
+    <link>/categories/finance/</link>
+    <description>Recent content in finance on Olivia&#39;s</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 11 Oct 2020 12:14:34 +0600</lastBuildDate><atom:link href="/categories/finance/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Yield Curve inversion</title>
+      <link>/portfolio/project-3/</link>
+      <pubDate>Sun, 11 Oct 2020 12:14:34 +0600</pubDate>
+      
+      <guid>/portfolio/project-3/</guid>
+      <description>IntroductionEvery so often, we hear warnings from commentators on the “inverted yield curve” and its predictive power with respect to recessions.</description>
+    </item>
+    
+  </channel>
+</rss>

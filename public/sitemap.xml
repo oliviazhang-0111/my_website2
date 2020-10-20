@@ -33,11 +33,6 @@
   </url>
   
   <url>
-    <loc>/portfolio/project-1/</loc>
-    <lastmod>2019-05-12T12:14:34+06:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/portfolio/project-2/</loc>
     <lastmod>2019-05-12T12:14:34+06:00</lastmod>
   </url>
@@ -93,12 +88,22 @@
   </url>
   
   <url>
+    <loc>/categories/data-analytics/</loc>
+    <lastmod>2019-05-12T12:14:34+06:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/categories/design/</loc>
     <lastmod>2019-05-12T12:14:34+06:00</lastmod>
   </url>
   
   <url>
     <loc>/categories/development/</loc>
+    <lastmod>2019-05-12T12:14:34+06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/group-project/</loc>
     <lastmod>2019-05-12T12:14:34+06:00</lastmod>
   </url>
   
@@ -114,6 +119,11 @@
   
   <url>
     <loc>/portfolio/</loc>
+    <lastmod>2019-05-12T12:14:34+06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/portfolio/project-1/</loc>
     <lastmod>2019-05-12T12:14:34+06:00</lastmod>
   </url>
   

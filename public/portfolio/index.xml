@@ -9,15 +9,6 @@
     <lastBuildDate>Sun, 12 May 2019 12:14:34 +0600</lastBuildDate><atom:link href="/portfolio/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Artwork Design</title>
-      <link>/portfolio/project-1/</link>
-      <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
-      
-      <guid>/portfolio/project-1/</guid>
-      <description>Project Requirements Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
-    </item>
-    
-    <item>
-      <title>Artwork Design</title>
       <link>/portfolio/project-2/</link>
       <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
       
@@ -86,6 +77,15 @@
       
       <guid>/portfolio/project-9/</guid>
       <description>Project Requirements Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</description>
+    </item>
+    
+    <item>
+      <title>Where Do People Drink The Most Beer, Wine And Spirits?</title>
+      <link>/portfolio/project-1/</link>
+      <pubDate>Sun, 12 May 2019 12:14:34 +0600</pubDate>
+      
+      <guid>/portfolio/project-1/</guid>
+      <description>Back in 2014, fivethiryeight.com published an article on alchohol consumption in different countries.</description>
     </item>
     
   </channel>

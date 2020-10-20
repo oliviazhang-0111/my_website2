@@ -86,7 +86,7 @@ service:
     - title : "UX Design"
       icon : "ti-vector"
       content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-      highlighted : true
+      highlighted : false
 
     - title : "Interaction Design"
       icon : "ti-panel"
@@ -156,6 +156,6 @@ clients_logo_slider:
 
 # blog
 blog:
-  enable : true
+  enable : false
   title : "Blogs"
   # blog post comes from "content/blog" folder

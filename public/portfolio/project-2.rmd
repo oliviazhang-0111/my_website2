@@ -91,6 +91,6 @@ Finally, using the original `gapminder` data, produce a life expectancy over tim
    NULL
 ```
 
-> Analysis  
+> Conlcusion  
 
-We generally can see an upward trend regarding life expectancy in all continents. However, several African countries suffered from a decrease since 1985, possibly due to unstable political environments and social unrest. There are two obvious outliers, an African country in 1992 and an Asia country in 1976, both of which had a sudden drop in the expected age, which I think can be caused by wars. European and Oceanian had high levels of life expectancy back in 1952, and they continued to live longer thanks to the improvement of technology (I guess).  
+We generally can see an upward trend regarding life expectancy in all continents. However, several African countries suffered from a decrease since 1985, possibly due to unstable political environments and social unrest. There are two obvious outliers, an African country in 1992 and an Asia country in 1976, both of which had a sudden drop in the expected age, which I think can be caused by wars. European and Oceanian had high levels of life expectancy back in 1952, and they continued to live longer thanks to the improvement of technology.  

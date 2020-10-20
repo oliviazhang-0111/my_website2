@@ -196,7 +196,7 @@ ggplot(yield_curve_99_spr, aes(x = date, y = price, group = var, colour = var)) 
        title = &quot;Yields on 3-Month and 10-Year US Treasury rates since 1999&quot;,
        caption = &quot;Source: St. Louis Federal Reserve Economic Database (FRED)&quot;) +
   theme(legend.title = element_blank())</code></pre>
-<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-3-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-3-1.png" width="700" style="display: block; margin: auto;" /></p>
 <p>According to <a href="https://en.wikipedia.org/wiki/List_of_recessions_in_the_United_States">Wikipedia’s list of recession in the United States</a>, since 1999 there have been two recession in the US: between Mar 2001–Nov 2001 and between Dec 2007–June 2009. Does the yield curve seem to flatten before these recessions? Can a yield curve flattening really mean a recession is coming in the US? Since 1999, when did short-term (3 months) yield more than longer term (10 years) debt?</p>
 <p>Besides calculating the spread (10year - 3months), there are a few things we need to do to produce our final plot</p>
 <ol style="list-style-type: decimal">
@@ -266,5 +266,5 @@ ggplot(yield_spread, aes(x = date, y = diff)) +
        title = &quot;Yield Curve Inversion: 10-year minus 3-month Treasury rates&quot;,
        subtitle = &quot;Difference in % points monthly averages.\nShaded areas correspond to recessions&quot;,
        caption = &quot;Source: St. Louis Federal Reserve Economic Database (FRED)&quot;)</code></pre>
-<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-4-1.png" width="648" style="display: block; margin: auto;" /></p>
+<p><img src="/portfolio/project-3_files/figure-html/unnamed-chunk-4-1.png" width="700" style="display: block; margin: auto;" /></p>
 </div>

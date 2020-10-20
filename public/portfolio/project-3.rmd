@@ -168,7 +168,7 @@ ggplot(yield_curve_99) +
 
 ### 3-month and 10-year yields since 1999
 
-```{r}
+```{r, fig.width = 7, dpi = 100}
 
 yield_curve_99_spr <- yield_curve_99 %>% 
   filter(maturity == "3m" | maturity == "10y")
@@ -215,7 +215,7 @@ recessions
 1. To add the grey shaded areas corresponding to recessions, we use `geom_rect()`
 2. To colour the ribbons blue/red we must see whether the spread is positive or negative and then use `geom_ribbon()`. You should be familiar with this from last week's homework on the excess weekly/monthly rentals of Santander Bikes in London.
 
-```{r}
+```{r, fig.width = 7, dpi = 100}
 
 yield_spread <- yield_curve %>% 
   filter(maturity == "3m" | maturity  == "10y") %>% 

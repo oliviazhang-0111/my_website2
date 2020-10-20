@@ -51,6 +51,7 @@ library(openintro)
 library(tidyquant)
 ```
 
+### Introduction
 Every so often, we hear warnings from commentators on the "inverted yield curve" and its predictive power with respect to recessions. An explainer what a [inverted yield curve is can be found here](https://www.reuters.com/article/us-usa-economy-yieldcurve-explainer/explainer-what-is-an-inverted-yield-curve-idUSKBN1O50GA). If you'd rather listen to something, here is a great podcast from [NPR on yield curve indicators](https://www.podbean.com/media/share/dir-4zgj9-6aefd11)
 
 In addition, many articles and commentators think that, e.g., [*Yield curve inversion is viewed as a harbinger of recession*](https://www.bloomberg.com/news/articles/2019-08-14/u-k-yield-curve-inverts-for-first-time-since-financial-crisis). One can always doubt whether inversions are truly a harbinger of recessions, and [use the attached parable on yield curve inversions](https://twitter.com/5_min_macro/status/1161627360946511873).
@@ -112,13 +113,13 @@ Our dataframe `df` has three columns (variables):
 
 The first thing would be to join this dataframe `df` with the dataframe `mylookup` so we have a more readable version of maturities, durations, etc.
 
+### Yields on US rates by duration since 1960
+
 ```{r join_data, warning=FALSE}
 
 yield_curve <-left_join(df,mylookup,by="symbol") 
 
 ```
-
-### Yields on US rates by duration since 1960
 
 ```{r}
 
@@ -168,7 +169,7 @@ ggplot(yield_curve_99) +
 
 ### 3-month and 10-year yields since 1999
 
-```{r, fig.width = 7, dpi = 100}
+```{r, fig.width = 10, dpi = 100}
 
 yield_curve_99_spr <- yield_curve_99 %>% 
   filter(maturity == "3m" | maturity == "10y")
@@ -215,7 +216,7 @@ recessions
 1. To add the grey shaded areas corresponding to recessions, we use `geom_rect()`
 2. To colour the ribbons blue/red we must see whether the spread is positive or negative and then use `geom_ribbon()`. You should be familiar with this from last week's homework on the excess weekly/monthly rentals of Santander Bikes in London.
 
-```{r, fig.width = 7, dpi = 100}
+```{r, fig.width = 10, dpi = 100}
 
 yield_spread <- yield_curve %>% 
   filter(maturity == "3m" | maturity  == "10y") %>% 

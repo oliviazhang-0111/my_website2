@@ -177,13 +177,15 @@ beer &lt;- drinks %&gt;%
   head(25)
 
 # create the plot of the top-25 countries using ggplot2
-ggplot(beer, aes(y = reorder(country, beer_servings), x = beer_servings)) +
+ggplot(beer, aes(y = reorder(country, beer_servings), x = beer_servings, fill = beer_servings)) +
   geom_col() +
   labs(y = &quot;&quot;,
        x = &quot;Servings of Beer&quot;,
        title = &quot;Beer Servings across Countries&quot;,
        caption = &quot;source: fivethirtyeight&quot;) +
-  theme_minimal()</code></pre>
+  theme_bw() +
+  scale_fill_gradient(low=&quot;#ffc692&quot;, # This function manually adds a gradient to the fill variable.
+                      high=&quot;#f28e1c&quot;)  # The codes are the hex colour codes for beer</code></pre>
 <p><img src="/portfolio/project-1_files/figure-html/beer_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
 </div>
 <div id="wine" class="section level2">
@@ -194,13 +196,14 @@ wine &lt;- drinks %&gt;%
   head(25)
 
 # create the plot of the top-25 countries using ggplot2
-ggplot(wine, aes(y = reorder(country, wine_servings), x = wine_servings)) +
+ggplot(wine, aes(y = reorder(country, wine_servings), x = wine_servings, fill = wine_servings)) +
   geom_col() +
   labs(y = &quot;&quot;,
        x = &quot;Servings of Wine&quot;,
        title = &quot;Wine Servings across Countries&quot;,
        caption = &quot;source: fivethirtyeight&quot;) +
-  theme_minimal()</code></pre>
+  theme_bw() +
+  scale_fill_gradient(low=&quot;#bb9394&quot;, high=&quot;#722f37&quot;) # hex colour codes for wine</code></pre>
 <p><img src="/portfolio/project-1_files/figure-html/wine_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
 </div>
 <div id="spirits" class="section level2">
@@ -211,13 +214,14 @@ spirits &lt;- drinks %&gt;%
   head(25)
 
 # create the plot of the top-25 countries using ggplot2
-ggplot(spirits, aes(y = reorder(country, spirit_servings), x = spirit_servings)) +
+ggplot(spirits, aes(y = reorder(country, spirit_servings), x = spirit_servings, fill = spirit_servings)) +
   geom_col() +
   labs(y = &quot;&quot;,
        x = &quot;Servings of Spirits&quot;,
        title = &quot;Spirits Servings across Countries&quot;,
        caption = &quot;source: fivethirtyeight&quot;) +
-  theme_minimal()</code></pre>
+  theme_bw() +
+  scale_fill_gradient(low=&quot;#fca393&quot;, high=&quot;#e03c31&quot;) # hex colour codes for spirit</code></pre>
 <p><img src="/portfolio/project-1_files/figure-html/spirit_plot-1.png" width="648" style="display: block; margin: auto;" /></p>
 <blockquote>
 <p>Conclusion:</p>

@@ -16,5 +16,3 @@ In my spare time, I enjoy swimming, dancing and singing. I practised ballet for 
 **- About my hometown**
 
 I have lived in [Guangzhou](https://en.wikipedia.org/wiki/Guangzhou) (also called Canton), China for all my life. Guangzhou is the 3rd largest city in China, and Cantonese is the native language here. Our culture is similar to that of Hong Kong, as both have the same origin. Cantonese cuisine is famous around the world, and "糯米鸡"(a type of dim-sum) is my favourite.
-
-![](https://image1.pearvideo.com/main/20181206/10379596-180711-0.png)
